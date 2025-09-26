@@ -5,10 +5,10 @@ running = True
 bpm = Bpm()
 scene = None
 
-def run(mainscene):
+def run(main_scene):
     global running, bpm, scene
     open_canvas()
-    scene = mainscene
+    scene = main_scene
     scene.enter()
     while running:
         bpm.update()
@@ -19,11 +19,11 @@ def run(mainscene):
     scene.exit()
     close_canvas()
 
-def changeScene(newScene):
+def change_scene(new_scene):
     global scene
     if scene is not None:
         scene.exit()
-    scene = newScene
+    scene = new_scene
     scene.enter()
 
 def quit():

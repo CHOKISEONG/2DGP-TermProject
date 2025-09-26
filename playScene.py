@@ -1,9 +1,12 @@
 from pico2d import *
+from Bird import Bird
 
 def enter():
-    global bird, x
-    bird = load_image('birdSheet/normalBird.png')
+    global bird, x, y
     x = 400
+    y = 300
+    bird = Bird(x,y)
+
 
 def exit():
     pass
@@ -13,7 +16,7 @@ def update():
 
 def draw():
     clear_canvas()
-    bird.draw(x, 300)
+    bird.draw()
     update_canvas()
 
 def handle_events():
