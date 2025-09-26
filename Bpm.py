@@ -7,15 +7,10 @@ class Bpm:
         self.pvTime = time.time()
 
     def update(self):
-        curTime = time.time()
-        if curTime - self.pvTime > self.interval:
-            self.oneBpm()
+        cur_time = time.time()
+        if cur_time - self.pvTime > self.interval:
+            self.one_bpm()
             self.pvTime = time.time()
 
-    def oneBpm(self):
+    def one_bpm(self):
         print("한 박자")
-
-bpm = Bpm()
-while True:
-    bpm.update()
-    time.sleep(bpm.interval)
