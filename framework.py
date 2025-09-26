@@ -1,21 +1,21 @@
 from pico2d import *
-from Bpm import *
 
 running = True
-bpm = Bpm()
 scene = None
 
 def run(main_scene):
-    global running, bpm, scene
+    global running, scene
     open_canvas()
     scene = main_scene
     scene.enter()
+
     while running:
-        bpm.update()
+        clear_canvas()
         scene.handle_events()
         scene.update()
         scene.draw()
         update_canvas()
+
     scene.exit()
     close_canvas()
 
