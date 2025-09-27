@@ -2,7 +2,7 @@ import pygame
 from pico2d import *
 from bird import Bird
 from map import Map
-from bgMusic import Music
+from musicManager import Music
 
 def enter():
     global bg, bird, birdPos, music

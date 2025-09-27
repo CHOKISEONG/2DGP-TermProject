@@ -1,5 +1,6 @@
 from pico2d import *
 from Bpm import Bpm
+from musicManager import Music
 
 LEFT = -1
 RIGHT = 1
@@ -26,7 +27,7 @@ class Bird:
         self.img_frame = 0
         self.img_type = AnimType()
 
-        self.sound = load_music('sound/walkSound.mp3')
+        self.sound = Music('sound/walkSound.mp3')
         self.bpm = Bpm(90)
         self.map = map
         self.pos = 0
