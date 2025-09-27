@@ -1,24 +1,24 @@
+import pygame
 from pico2d import *
 from bird import Bird
+from map import Map
 
 def enter():
-    global bg, bird, x, y
-    x = 400
-    y = 300
-    bird = Bird(x,y)
-
+    global bg, bird, birdPos
+    bg = Map()
+    bird = Bird(bg)
+    birdPos = bird.getPos()
 
 def exit():
     pass
 
 def update():
-    bird.update()
+    bird.handle_event(get_events())
     pass
 
 def draw():
+    bg.draw()
     bird.draw()
 
 def handle_events():
-    events = get_events()
-    for event in events:
-        pass
+    pass
