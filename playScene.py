@@ -2,9 +2,12 @@ import pygame
 from pico2d import *
 from bird import Bird
 from map import Map
+from bgMusic import Music
 
 def enter():
-    global bg, bird, birdPos
+    global bg, bird, birdPos, music
+    music = Music('sound/90bpm_mainScene.mp3')
+    music.play(repeat=True)
     bg = Map()
     bird = Bird(bg)
     birdPos = bird.getPos()
@@ -14,7 +17,6 @@ def exit():
 
 def update():
     bird.handle_event(get_events())
-    pass
 
 def draw():
     bg.draw()

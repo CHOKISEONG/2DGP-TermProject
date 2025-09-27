@@ -1,15 +1,12 @@
-import pygame
 from pico2d import *
 from Bpm import Bpm
-from enum import Enum
-from map import Map
 
 LEFT = -1
 RIGHT = 1
 UP = 17
 DOWN = -17
 
-class AnimType():
+class AnimType:
     def __init__(self):
         self.types = {
             'down': [(8, 240, 48, 48), (8, 160, 48, 48), (88, 240, 48, 48), (88, 160, 48, 48)],
@@ -25,12 +22,14 @@ class AnimType():
 
 class Bird:
     def __init__(self, map):
-        self.map = map
-        self.pos = 0
         self.img = load_image('birdSheet/normalBird.png')
         self.img_frame = 0
         self.img_type = AnimType()
-        self.bpm = Bpm()
+
+        self.sound = load_music('sound/walkSound.mp3')
+        self.bpm = Bpm(90)
+        self.map = map
+        self.pos = 0
 
     def getPos(self):
         return self.pos
@@ -44,19 +43,23 @@ class Bird:
             self.pos = new_pos
 
     def handle_event(self, events):
-        for event in events:
-            if event.type == SDL_KEYDOWN:
-                if event.key == SDLK_LEFT and self.pos % 17 != 0:
-                    self.img_type.change_type('left')
-                    self.move(LEFT)
-                elif event.key == SDLK_RIGHT and self.pos % 17 != 16:
-                    self.img_type.change_type('right')
-                    self.move(RIGHT)
-                elif event.key == SDLK_UP and self.pos // 17 != 17:
-                    self.img_type.change_type('up')
-                    self.move(UP)
-                elif event.key == SDLK_DOWN and self.pos // 17 != 0:
-                    self.img_type.change_type('down')
-                    self.move(DOWN)
         if self.bpm.update():
-            self.img_frame = (self.img_frame + 1) % 4
+            for event in events:
+                if event.type == SDL_KEYDOWN:
+                    self.img_frame = (self.img_frame + 1) % 4
+                    if event.key == SDLK_LEFT and self.pos % 17 != 0:
+                        self.img_type.change_type('left')
+                        self.move(LEFT)
+                        self.sound.play()
+                    elif event.key == SDLK_RIGHT and self.pos % 17 != 16:
+                        self.img_type.change_type('right')
+                        self.move(RIGHT)
+                        self.sound.play()
+                    elif event.key == SDLK_UP and self.pos // 17 != 17:
+                        self.img_type.change_type('up')
+                        self.move(UP)
+                        self.sound.play()
+                    elif event.key == SDLK_DOWN and self.pos // 17 != 0:
+                        self.img_type.change_type('down')
+                        self.move(DOWN)
+                        self.sound.play()
