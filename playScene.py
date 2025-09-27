@@ -1,5 +1,5 @@
 from pico2d import *
-from Bird import Bird
+from bird import Bird
 
 def enter():
     global bg, bird, x, y
