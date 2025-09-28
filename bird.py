@@ -28,7 +28,7 @@ class Bird:
         self.img_type = AnimType()
 
         self.sound = Music('sound/walkSound.mp3')
-        self.bpm = Bpm(90)
+        self.bpm = Bpm(160)
         self.map = map
         self.pos = 0
 
@@ -52,15 +52,16 @@ class Bird:
                         self.img_type.change_type('left')
                         self.move(LEFT)
                         self.sound.play()
-                    elif event.key == SDLK_RIGHT and self.pos % 17 != 16:
+                    if event.key == SDLK_RIGHT and self.pos % 17 != 16:
                         self.img_type.change_type('right')
                         self.move(RIGHT)
                         self.sound.play()
-                    elif event.key == SDLK_UP and self.pos // 17 != 17:
+                    if event.key == SDLK_UP and self.pos // 17 != 17:
                         self.img_type.change_type('up')
                         self.move(UP)
                         self.sound.play()
-                    elif event.key == SDLK_DOWN and self.pos // 17 != 0:
+                    if event.key == SDLK_DOWN and self.pos // 17 != 0:
                         self.img_type.change_type('down')
                         self.move(DOWN)
                         self.sound.play()
+

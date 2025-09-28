@@ -3,6 +3,7 @@ from pico2d import *
 class Music:
     def __init__(self, file_path):
         self.music = load_wav(file_path)
+        self.music.set_volume(50)
         self._is_playing = False
 
     def play(self, repeat=False):

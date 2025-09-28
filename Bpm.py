@@ -10,7 +10,7 @@ class Bpm:
         cur_time = time.time()
         diff = cur_time - self.pvTime
         if diff < self.interval:
-            return diff < self.interval / 10.0 or diff > self.interval * 9.0 / 10.0
+            return diff < self.interval / 6.0 or diff > self.interval * 5.0 / 6.0
         else:
             self.pvTime = cur_time
             return True
