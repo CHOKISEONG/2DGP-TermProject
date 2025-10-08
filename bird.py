@@ -22,25 +22,22 @@ class AnimType:
             self.current_type = direction
 
 class Bird:
-    def __init__(self, map):
-        self.img = load_image('birdSheet/normalBird.png')
+    def __init__(self, stage):
+        self.img = None
         self.img_frame = 0
         self.img_type = AnimType()
 
         self.sound = Music('sound/walkSound.mp3')
-        self.bpm = Bpm(160)
-        self.map = map
+        self.bpm = Bpm(120)
+        self.stage = stage
         self.pos = 0
 
     def getPos(self):
         return self.pos
 
-    def draw(self):
-        self.img.clip_draw(*self.img_type.types[self.img_type.current_type][self.img_frame], *self.map.pos[self.pos])
-
     def move(self, idx: int):
         new_pos = self.pos + idx
-        if 0 <= new_pos < len(self.map.pos):
+        if 0 <= new_pos < len(self.stage.pos):
             self.pos = new_pos
 
     def handle_event(self, events):

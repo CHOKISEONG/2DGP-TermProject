@@ -1,26 +1,30 @@
-import pygame
 from pico2d import *
 from bird import Bird
+from black_bird import BlackBird
+from hat_bird import HatBird
 from map import Map
 from musicManager import Music
 
 def enter():
-    global bg, bird, birdPos, music
-    music = Music('sound/90bpm_mainScene.mp3')
+    global bg, player1, player2, music
+    music = Music('sound/120bpm_mainScene.mp3')
     music.play(repeat=True)
     bg = Map()
-    bird = Bird(bg)
-    birdPos = bird.getPos()
+    player1 = BlackBird(bg)
+    player2 = HatBird(bg)
+    player2.move(13)
 
 def exit():
     pass
 
 def update():
-    bird.handle_event(get_events())
+    player1.handle_event(get_events())
+    player2.handle_event(get_events())
 
 def draw():
     bg.draw()
-    bird.draw()
+    player1.draw()
+    player2.draw()
 
 def handle_events():
     pass
