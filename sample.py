@@ -1,9 +1,7 @@
 from pico2d import *
-import bpm
 
-class Music(bpm.Bpm):
-    def __init__(self, file_path, beat):
-        bpm.Bpm.__init__(self, beat)
+class Sample:
+    def __init__(self, file_path):
         self.music = load_wav(file_path)
         self.music.set_volume(50)
         self._is_playing = False
@@ -24,4 +22,3 @@ class Music(bpm.Bpm):
 
     def is_playing(self):
         return self._is_playing
-

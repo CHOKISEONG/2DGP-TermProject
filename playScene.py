@@ -1,5 +1,5 @@
+import pygame
 from pico2d import *
-from bird import Bird
 from black_bird import BlackBird
 from hat_bird import HatBird
 from map import Map
@@ -7,7 +7,7 @@ from musicManager import Music
 
 def enter():
     global bg, player1, player2, music
-    music = Music('sound/120bpm_mainScene.mp3')
+    music = Music('sound/120bpm_mainScene.mp3', 120)
     music.play(repeat=True)
     bg = Map()
     player1 = BlackBird(bg)
@@ -18,8 +18,9 @@ def exit():
     pass
 
 def update():
-    player1.handle_event(get_events())
-    player2.handle_event(get_events())
+    events = pico2d.get_events()
+    player1.handle_event(events)
+    player2.handle_event(events)
 
 def draw():
     bg.draw()
@@ -27,4 +28,5 @@ def draw():
     player2.draw()
 
 def handle_events():
+
     pass

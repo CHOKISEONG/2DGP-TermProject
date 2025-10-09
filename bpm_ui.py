@@ -1,5 +1,5 @@
 from pico2d import *
-from Bpm import Bpm
+from bpm import Bpm
 
 class BpmUI:
     def __init__(self):

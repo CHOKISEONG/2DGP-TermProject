@@ -15,23 +15,22 @@ class HatBird(bird.Bird):
         self.img.clip_draw(*self.img_type.types[self.img_type.current_type][self.img_frame], *self.stage.pos[self.pos])
 
     def handle_event(self, events):
-        if self.bpm.update():
-            for event in events:
-                if event.type == SDL_KEYDOWN:
-                    self.img_frame = (self.img_frame + 1) % 4
-                    if event.key == SDLK_j and self.pos % 17 != 0:
-                        self.img_type.change_type('left')
-                        self.move(LEFT)
-                        self.sound.play()
-                    if event.key == SDLK_l and self.pos % 17 != 16:
-                        self.img_type.change_type('right')
-                        self.move(RIGHT)
-                        self.sound.play()
-                    if event.key == SDLK_i and self.pos // 17 != 17:
-                        self.img_type.change_type('up')
-                        self.move(UP)
-                        self.sound.play()
-                    if event.key == SDLK_k and self.pos // 17 != 0:
-                        self.img_type.change_type('down')
-                        self.move(DOWN)
-                        self.sound.play()
+        for event in events:
+            if event.type == SDL_KEYDOWN:
+                self.img_frame = (self.img_frame + 1) % 4
+                if event.key == SDLK_j and self.pos % 17 != 0:
+                    self.img_type.change_type('left')
+                    self.move(LEFT)
+                    self.sound.play()
+                if event.key == SDLK_l and self.pos % 17 != 16:
+                    self.img_type.change_type('right')
+                    self.move(RIGHT)
+                    self.sound.play()
+                if event.key == SDLK_i and self.pos // 17 != 17:
+                    self.img_type.change_type('up')
+                    self.move(UP)
+                    self.sound.play()
+                if event.key == SDLK_k and self.pos // 17 != 0:
+                    self.img_type.change_type('down')
+                    self.move(DOWN)
+                    self.sound.play()
