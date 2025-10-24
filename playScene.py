@@ -13,7 +13,7 @@ def enter():
     music = Music('sound/120bpm_mainScene.mp3', 120)
     music.play(repeat=True)
     bg = Map()
-    player1 = ShovelBird(bg)
+    player1 = ShovelBird()
     crowd = Crowd()
 
 def exit():
@@ -31,10 +31,9 @@ def handle_events():
     global bg, player1, music, crowd
     result, diff = music.check_input_timing()
     if result == "Miss":
+        player1.handle_event(key_state)
         key_state.clear()
-
-    for event in get_events():
-        if event.type == SDL_KEYDOWN:
+    elif result == "Perfect":
+        for event in get_events():
+            if event.type == SDL_KEYDOWN:
                 key_state.add(event.key)
-
-    player1.handle_event(key_state)

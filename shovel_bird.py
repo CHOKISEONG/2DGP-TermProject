@@ -1,4 +1,4 @@
-import bird
+from bird import Bird
 from pico2d import *
 
 LEFT = -1
@@ -6,25 +6,36 @@ RIGHT = 1
 UP = 17
 DOWN = -17
 
-class ShovelBird(bird.Bird):
-    def __init__(self, stage):
-        bird.Bird.__init__(self, stage)
+class ShovelBird(Bird):
+    def __init__(self):
+        super().__init__()
         self.img = load_image('birdSheet/shovelBird.png')
+        self.area = [
+            ((35 + x * 42.7 + 21) if y % 2 == 1 else (35 + x * 42.7), 95 + y * 28)
+            for y in range(18) for x in range(17)
+        ]
+        self.pos = 0
 
     def draw(self):
-        self.img.clip_draw(*self.img_type.types[self.img_type.current_type][self.img_frame], *self.stage.pos[self.pos])
+        self.img.clip_draw(*self.img_type.types[self.img_type.current_type][self.img_frame], *self.area[self.pos])
 
     def move_up_left(self):
+        print('Move up left')
         pass
     def move_up_right(self):
+        print('Move up right')
         pass
     def move_down_left(self):
+        print('Move down left')
         pass
     def move_down_right(self):
+        print('Move down right')
         pass
     def move_left(self):
+        print('Move left')
         pass
     def move_right(self):
+        print('Move right')
         pass
 
     def handle_event(self, key_state):

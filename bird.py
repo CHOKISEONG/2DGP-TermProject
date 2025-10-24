@@ -23,13 +23,12 @@ class AnimType:
             self.current_type = direction
 
 class Bird:
-    def __init__(self, stage):
+    def __init__(self):
         self.img = None
         self.img_frame = 0
         self.img_type = AnimType()
 
         self.sound = Sample('sound/walkSound.mp3')
-        self.stage = stage
         self.pos = 0
 
     def get_pos(self):
