@@ -32,27 +32,8 @@ class Bird:
         self.stage = stage
         self.pos = 0
 
-    def getPos(self):
+    def get_pos(self):
         return self.pos
-
-    def handle_event(self, events):
-        for event in events:
-            if event.type == SDL_KEYDOWN:
-                self.img_frame = (self.img_frame + 1) % 4
-                if event.key == SDLK_LEFT and self.pos % 17 != 0:
-                    self.img_type.change_type('left')
-                    self.move(LEFT)
-                    self.sound.play()
-                if event.key == SDLK_RIGHT and self.pos % 17 != 16:
-                    self.img_type.change_type('right')
-                    self.move(RIGHT)
-                    self.sound.play()
-                if event.key == SDLK_UP and self.pos // 17 != 17:
-                    self.img_type.change_type('up')
-                    self.move(UP)
-                    self.sound.play()
-                if event.key == SDLK_DOWN and self.pos // 17 != 0:
-                    self.img_type.change_type('down')
-                    self.move(DOWN)
-                    self.sound.play()
+    def set_pos(self, pos):
+        self.pos = pos
 
