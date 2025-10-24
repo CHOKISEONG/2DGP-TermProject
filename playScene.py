@@ -33,7 +33,7 @@ def handle_events():
     if result == "Miss":
         player1.handle_event(key_state)
         key_state.clear()
-    elif result == "Perfect":
+    elif result == "Good" or result == "Perfect":
         for event in get_events():
             if event.type == SDL_KEYDOWN:
                 key_state.add(event.key)
