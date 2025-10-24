@@ -14,46 +14,30 @@ class ShovelBird(bird.Bird):
     def draw(self):
         self.img.clip_draw(*self.img_type.types[self.img_type.current_type][self.img_frame], *self.stage.pos[self.pos])
 
-    def move(self, degree):
-        if degree == 0:
-            if self.pos % 17 != 0:
-                self.img_type.change_type('left')
-                new_pos = self.pos + LEFT
-                if 0 <= new_pos < len(self.stage.pos):
-                    self.pos = new_pos
-                self.sound.play()
-        elif degree == 180:
-            if self.pos % 17 != 16:
-                self.img_type.change_type('right')
-                self.move(RIGHT)
-                self.sound.play()
-        elif degree == 60:
-            if self.pos // 17 != 17:
-                self.img_type.change_type('up')
-                self.move(UP)
-                self.sound.play()
-            if event.key == SDLK_k and self.pos // 17 != 0:
-                self.img_type.change_type('down')
-                self.move(DOWN)
-                self.sound.play()
+    def move_up_left(self):
+        pass
+    def move_up_right(self):
+        pass
+    def move_down_left(self):
+        pass
+    def move_down_right(self):
+        pass
+    def move_left(self):
+        pass
+    def move_right(self):
+        pass
 
-    def handle_event(self, events):
-        for event in events:
-            if event.type == SDL_KEYDOWN:
-                self.img_frame = (self.img_frame + 1) % 4
-                if event.key == SDLK_j and self.pos % 17 != 0:
-                    self.img_type.change_type('left')
-                    self.move(LEFT)
-                    self.sound.play()
-                if event.key == SDLK_l and self.pos % 17 != 16:
-                    self.img_type.change_type('right')
-                    self.move(RIGHT)
-                    self.sound.play()
-                if event.key == SDLK_i and self.pos // 17 != 17:
-                    self.img_type.change_type('up')
-                    self.move(UP)
-                    self.sound.play()
-                if event.key == SDLK_k and self.pos // 17 != 0:
-                    self.img_type.change_type('down')
-                    self.move(DOWN)
-                    self.sound.play()
+    def handle_event(self, key_state):
+        # 예시: SDLK_w, SDLK_a 등은 pico2d에서 정의되어 있음
+        if SDLK_w in key_state and SDLK_a in key_state:
+            self.move_up_left()
+        elif SDLK_w in key_state and SDLK_d in key_state:
+            self.move_up_right()
+        elif SDLK_a in key_state and SDLK_s in key_state:
+            self.move_down_left()
+        elif SDLK_s in key_state and SDLK_d in key_state:
+            self.move_down_right()
+        elif SDLK_a in key_state:
+            self.move_left()
+        elif SDLK_d in key_state:
+            self.move_right()

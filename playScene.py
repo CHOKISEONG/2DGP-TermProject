@@ -1,3 +1,4 @@
+import pygame
 from pico2d import *
 from crowd import Crowd
 from black_bird import BlackBird
@@ -27,8 +28,13 @@ def draw():
     crowd.draw()
 
 def handle_events():
-    events = get_events()
-    for event in events:
-        if event.type == SDL_MOUSEBUTTONDOWN:
-            mx, my = event.x, event.y
-            print(f"x : {mx} y : {my}")
+    global bg, player1, music, crowd
+    result, diff = music.check_input_timing()
+    if result == "Miss":
+        key_state.clear()
+
+    for event in get_events():
+        if event.type == SDL_KEYDOWN:
+                key_state.add(event.key)
+
+    player1.handle_event(key_state)
