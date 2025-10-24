@@ -1,4 +1,4 @@
-import random
+import random, math
 from pico2d import *
 
 def get_random_pos():
@@ -16,27 +16,33 @@ def get_random_pos():
     y = y1 + (y2 - y1) * t
     return x, y
 
+
 class Crowd:
     bird_names = ["budgie", "cockatiel", "duck", "parrot", "robin", "sparrow", "toucan"]
+
     def __init__(self):
         self.images = {name: load_image(f"birdSheet/{name.capitalize()}.png") for name in self.bird_names}
         self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
-        self.directions = {name: [] for name in self.bird_names}
-
-        self.look_left = (0, 0, 48, 48)
-        self.look_right = (48, 0, 48, 48)
-
-        for name in self.bird_names:
-            for pos in self.positions[name]:
-                if pos[0] > 400:
-                    self.directions[name].append(self.look_left)
-                else:
-                    self.directions[name].append(self.look_right)
+        self.w, self.h = 48, 48
+        self.cx, self.cy = 400, 300  # 중앙 좌표
 
     def draw(self):
         for i in range(15):
             for name in self.bird_names:
-                image = self.images[name]
-                look = self.directions[name][i]
-                pos = self.positions[name][i]
-                image.clip_draw(*look, *pos)
+                img = self.images[name]
+                x, y = self.positions[name][i]
+                dx = self.cx - x
+                dy = self.cy - y
+                rad = math.atan2(dy, dx) + math.pi
+
+                if x < 400:
+                    flip = 'v'
+                else:
+                    flip = 'none'
+
+                img.clip_composite_draw(
+                    0, 0, self.w, self.h,
+                    rad, flip,
+                    x, y,
+                    self.w, self.h
+                )
