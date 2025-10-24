@@ -5,7 +5,7 @@ scene = None
 
 def run(main_scene):
     global running, scene
-    open_canvas()
+    open_canvas(800,600)
     scene = main_scene
     scene.enter()
 

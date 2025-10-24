@@ -9,11 +9,12 @@ DOWN = -17
 
 class AnimType:
     def __init__(self):
+        self.width, self.height = 60, 60
         self.types = {
-            'down': [(8, 240, 48, 48), (8, 160, 48, 48), (88, 240, 48, 48), (88, 160, 48, 48)],
-            'left': [(8, 0, 48, 48), (88, 0, 48, 48), (8, 0, 48, 48), (88, 0, 48, 48)],
-            'right': [(248, 240, 48, 48), (248, 160, 48, 48), (248, 80, 48, 48), (248, 0, 48, 48)],
-            'up': [(168, 240, 48, 48), (168, 160, 48, 48), (8, 80, 48, 48), (88, 80, 48, 48)]
+            'down': [(8, 240, self.width, self.height), (8, 160, self.width, self.height), (88, 240, self.width, self.height), (88, 160, self.width, self.height)],
+            'left': [(8, 0, self.width, self.height), (88, 0, self.width, self.height), (8, 0, self.width, self.height), (88, 0, self.width, self.height)],
+            'right': [(248, self.width, self.height), (248, 160, self.width, self.height), (248, 80, self.width, self.height), (248, 0, self.width, self.height)],
+            'up': [(168, 240, self.width, self.height), (168, 160, self.width, self.height), (8, 80, self.width, self.height), (88, 80, self.width, self.height)]
         }
         self.current_type = 'down'
 
@@ -33,11 +34,6 @@ class Bird:
 
     def getPos(self):
         return self.pos
-
-    def move(self, idx: int):
-        new_pos = self.pos + idx
-        if 0 <= new_pos < len(self.stage.pos):
-            self.pos = new_pos
 
     def handle_event(self, events):
         for event in events:
