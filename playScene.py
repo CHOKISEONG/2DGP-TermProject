@@ -10,7 +10,7 @@ miss_handled = False
 
 def enter():
     global bg, player1, music, crowd
-    music = Music('sound/120bpm_mainScene.mp3', 120)
+    music = Music('sound/120bpm_mainScene.wav', 120)
     music.play(repeat=True)
     bg = Map()
     player1 = ShovelBird(bg)
