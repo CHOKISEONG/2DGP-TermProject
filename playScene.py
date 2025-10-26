@@ -11,7 +11,7 @@ def enter():
     music = Music('sound/120bpm_mainScene.mp3', 120)
     music.play(repeat=True)
     bg = Map()
-    player1 = ShovelBird()
+    player1 = ShovelBird(bg)
     crowd = Crowd()
 
 def exit():

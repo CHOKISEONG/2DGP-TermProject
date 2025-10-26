@@ -1,5 +1,5 @@
 from sample import *
-
+from map import TileType
 LEFT = -1
 RIGHT = 1
 UP = 17
@@ -34,9 +34,10 @@ class AnimationController:
         self.img.clip_draw(*self.types[self.current_type][self.frame], x, y)
 
 class Bird:
-    def __init__(self, img_path):
+    def __init__(self, img_path, field):
         self.img = AnimationController('birdSheet/shovelBird.png')
         self.sound = Sample('sound/walkSound.mp3')
+        self.field = field
         self.area = [
             ((40 + x * 42.7 + 21) if y % 2 == 1 else (40 + x * 42.7), 95 + y * 28)
             for y in range(18) for x in range(17)
@@ -60,9 +61,9 @@ class Bird:
         self.img.draw(x,y)
 
     def get_pos(self):
-        return self.pos
-    def set_pos(self, pos):
-        self.pos = pos
+        row, col = self.pos_to_row_col(self.pos)
+        print(f'현재 위치: {row}, {col}')
+        return row, col
 
     def pos_to_row_col(self, pos):
         return pos // 17, pos % 17
@@ -137,14 +138,55 @@ class Bird:
             self.target_pos = list(self.area[new_pos])
 
     def tile_up_left(self):
-        pass
+        self.img.change_type('up')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y + 1, x
+        else:
+            ny, nx = y + 1, x - 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.UPLEFT)
+
     def tile_up_right(self):
-        pass
+        self.img.change_type('up')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y + 1, x + 1
+        else:
+            ny, nx = y + 1, x
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.UPRIGHT)
+
     def tile_down_left(self):
-        pass
+        self.img.change_type('down')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y - 1, x
+        else:
+            ny, nx = y - 1, x - 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.DOWNLEFT)
+
     def tile_down_right(self):
-        pass
+        self.img.change_type('down')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y - 1, x + 1
+        else:
+            ny, nx = y - 1, x
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.DOWNRIGHT)
+
     def tile_left(self):
-        pass
+        self.img.change_type('left')
+        y, x = self.pos_to_row_col(self.pos)
+        ny, nx = y, x - 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.LEFT)
+
     def tile_right(self):
-        pass
+        self.img.change_type('right')
+        row, col = self.pos_to_row_col(self.pos)
+        ny, nx = row, col + 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.RIGHT)

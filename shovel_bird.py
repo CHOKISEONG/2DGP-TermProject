@@ -7,8 +7,8 @@ UP = 17
 DOWN = -17
 
 class ShovelBird(Bird):
-    def __init__(self):
-        super().__init__('birdSheet/shovelBird.png')
+    def __init__(self, field):
+        super().__init__('birdSheet/shovelBird.png', field)
 
     def handle_event(self, key_state):
         # 방향 타일 놓기 처리
