@@ -9,19 +9,21 @@ key_state = set()
 miss_handled = False
 
 def enter():
-    global bg, player1, music, crowd
-    music = Music('sound/120bpm_mainScene.wav', 120)
+    global music, player1, bg, crowd
+    music = Music('sound/120bpm_GerudoValley.wav', 120)
     music.play(repeat=True)
     bg = Map()
     player1 = ShovelBird(bg)
     crowd = Crowd()
+    play_time = time.time()
 
 def exit():
     pass
 
 def update():
+    # play_time = time.time()
     beat_index = music.get_current_beat()
-    player1.update(beat_index)
+    player1.update()
     pass
 
 def draw():

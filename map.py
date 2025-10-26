@@ -1,6 +1,5 @@
 from pico2d import *
 from enum import Enum
-from random import choice
 import math
 
 class TileType(Enum):

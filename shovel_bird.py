@@ -1,18 +1,98 @@
 from bird import Bird
 from sample import *
 from map import TileType
+from state_machine import StateMachine
 
-LEFT = -1
-RIGHT = 1
-UP = 17
-DOWN = -17
+can_move = lambda e : e[0] == 'CAN_MOVE'
+tile_event = lambda e : e[0] == 'TILE_EVENT'
+fall = lambda e : e[0] == 'FALL'
+resurrection = lambda e : e[0] == 'RESURRECTION'
+
+class Idle:
+    def __init__(self, bird):
+        self.bird = bird
+        self.start_time = get_time()
+        self.elapsed_time = 0
+        self.one_beat = 120 / self.bird.bpm
+    def enter(self, event):
+        pass
+    def exit(self, event):
+        pass
+    def do(self):
+        self.elapsed_time = get_time() - self.start_time
+        if self.elapsed_time > self.one_beat/4:
+            self.start_time = get_time()
+            self.bird.img.update()
+    def draw(self):
+        self.bird.img.draw()
+
+class Move:
+    def __init__(self, bird):
+        self.bird = bird
+    def enter(self, event):
+        pass
+    def exit(self, event):
+        pass
+    def do(self):
+        self.bird.img.update()
+    def draw(self):
+        self.bird.img.draw()
+
+class TileEvent:
+    def __init__(self, bird):
+        self.bird = bird
+        self.start_time = get_time()
+    def enter(self, event):
+        pass
+    def exit(self, event):
+        pass
+    def do(self):
+        if get_time() - self.start_time > 0.3:
+            self.bird.img.update()
+    def draw(self):
+        self.bird.img.draw()
+
+class Fall:
+    def __init__(self, bird):
+        self.bird = bird
+        self.start_time = get_time()
+    def enter(self, event):
+        pass
+    def exit(self, event):
+        pass
+    def do(self):
+        if get_time() - self.start_time > 0.3:
+            self.bird.img.update()
+    def draw(self):
+        self.bird.img.draw()
 
 class ShovelBird(Bird):
     def __init__(self, field):
         super().__init__('birdSheet/shovelBird.png', field)
         self.tile_sound = Sample('sound/tileSound.mp3')
+        self.IDLE = Idle(self)
+        self.TILE_EVENT = TileEvent(self)
+        self.FALL = Fall(self)
+        self.state_machine = StateMachine(
+            self.IDLE,
+       {
+                self.IDLE: {tile_event: self.TILE_EVENT},
+                self.TILE_EVENT: {can_move: self.IDLE, fall: self.FALL},
+                self.FALL: {resurrection: self.IDLE}
+            }
+        )
 
+    def update(self):
+        super().update()
+        self.state_machine.update()
     def handle_event(self, key_state):
+        # 이동 타일 밟는거 처리
+        current_tile = self.field.get_tile(*self.get_pos())
+        if self.state_machine.cur_state != self.TILE_EVENT:
+            if current_tile in (TileType.LEFT, TileType.RIGHT, TileType.UPLEFT,
+                                TileType.UPRIGHT, TileType.DOWNLEFT, TileType.DOWNRIGHT):
+                self.state_machine.handle_state_event(('TILE_EVENT', current_tile))
+
         # 조작 불가능한 상태면 그냥 리턴
         if not self.can_control:
             key_state.clear()
