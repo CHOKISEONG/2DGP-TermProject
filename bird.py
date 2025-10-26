@@ -44,20 +44,8 @@ class Bird:
         self.target_pos = list(self.current_pos)
         self.dir = 0 # 캐릭터가 이동한 방향쪽 각도를 나타냄 (ex: 왼쪽 위 이동하면 dir은 120)
 
-        self.can_control = True
         self.move_speed = 0.02
-        self.auto_move_length = 3
-        self.force_move_dir = None
-        self.force_move_count = 0
         self.last_beat_idx = -1
-
-    def update(self):
-        for i in range(2):
-            diff = self.target_pos[i] - self.current_pos[i]
-            if abs(diff) > 0.5:
-                self.current_pos[i] += diff * self.move_speed
-            else:
-                self.current_pos[i] = self.target_pos[i]
 
     def draw(self):
         x, y = self.current_pos
@@ -72,6 +60,20 @@ class Bird:
 
     def row_col_to_pos(self, row, col):
         return row * 17 + col
+
+    def move(self, direction):
+        if direction == TileType.UPLEFT:
+            self.move_up_left()
+        elif direction == TileType.UPRIGHT:
+            self.move_up_right()
+        elif direction == TileType.DOWNLEFT:
+            self.move_down_left()
+        elif direction == TileType.DOWNRIGHT:
+            self.move_down_right()
+        elif direction == TileType.LEFT:
+            self.move_left()
+        elif direction == TileType.RIGHT:
+            self.move_right()
 
     def move_up_left(self):
         self.img.change_type('up')

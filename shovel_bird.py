@@ -42,13 +42,42 @@ class TileEvent:
     def __init__(self, bird):
         self.bird = bird
         self.start_time = get_time()
+        self.dir = ['down','left','up','right']
+        self.dir_idx = 0
+        self.speed = 0
+        self.time_left = 0
+        self.type = None
+        self.tile_signal = None
+
     def enter(self, event):
-        pass
+        self.type = event[1]
+        self.time_left = self.speed = event[2]
+
     def exit(self, event):
         pass
+
     def do(self):
-        if get_time() - self.start_time > 0.3:
-            self.bird.img.update()
+        print(self.time_left)
+        if self.time_left == 0: self.bird.state_machine.handle_state_event(('CAN_MOVE', None))
+
+        current_tile = self.bird.field.get_tile(*self.bird.get_pos())
+        if current_tile in (TileType.LEFT, TileType.RIGHT, TileType.UPLEFT,TileType.UPRIGHT, TileType.DOWNLEFT, TileType.DOWNRIGHT):
+            if self.tile_signal:
+                self.type = current_tile
+                self.speed += 1
+                self.time_left = self.speed
+                self.tile_signal = False
+        else:
+            self.tile_signal = True
+
+        if get_time() - self.start_time > 1 / self.speed:
+            self.bird.move(self.type)
+            self.dir_idx = (self.dir_idx + 1) % len(self.dir)
+            new_direction = self.dir[self.dir_idx]
+            self.bird.img.change_type(new_direction)
+            self.start_time = get_time()
+            self.time_left -= 1
+
     def draw(self):
         self.bird.img.draw()
 
@@ -57,12 +86,14 @@ class Fall:
         self.bird = bird
         self.start_time = get_time()
     def enter(self, event):
+
         pass
     def exit(self, event):
         pass
     def do(self):
         if get_time() - self.start_time > 0.3:
             self.bird.img.update()
+        self.bird.state_machine.handle_state_event(('CAN_MOVE',None))
     def draw(self):
         self.bird.img.draw()
 
@@ -70,6 +101,8 @@ class ShovelBird(Bird):
     def __init__(self, field):
         super().__init__('birdSheet/shovelBird.png', field)
         self.tile_sound = Sample('sound/tileSound.mp3')
+        self.time_elapsed = -1
+        self.speed = 3
         self.IDLE = Idle(self)
         self.TILE_EVENT = TileEvent(self)
         self.FALL = Fall(self)
@@ -77,26 +110,31 @@ class ShovelBird(Bird):
             self.IDLE,
        {
                 self.IDLE: {tile_event: self.TILE_EVENT},
-                self.TILE_EVENT: {can_move: self.IDLE, fall: self.FALL},
+                self.TILE_EVENT: {can_move: self.IDLE, fall: self.FALL, tile_event: self.TILE_EVENT},
                 self.FALL: {resurrection: self.IDLE}
             }
         )
 
-    def update(self):
-        super().update()
-        self.state_machine.update()
-    def handle_event(self, key_state):
-        # 이동 타일 밟는거 처리
-        current_tile = self.field.get_tile(*self.get_pos())
-        if self.state_machine.cur_state != self.TILE_EVENT:
-            if current_tile in (TileType.LEFT, TileType.RIGHT, TileType.UPLEFT,
-                                TileType.UPRIGHT, TileType.DOWNLEFT, TileType.DOWNRIGHT):
-                self.state_machine.handle_state_event(('TILE_EVENT', current_tile))
+    def update(self, beat_index):
+        for i in range(2):
+            diff = self.target_pos[i] - self.current_pos[i]
+            if abs(diff) > 0.5:
+                self.current_pos[i] += diff * self.move_speed
+            else:
+                self.current_pos[i] = self.target_pos[i]
 
-        # 조작 불가능한 상태면 그냥 리턴
-        if not self.can_control:
-            key_state.clear()
-            return
+        # 이동 타일 밟는거 처리
+        if self.time_elapsed != beat_index:
+            current_tile = self.field.get_tile(*self.get_pos())
+            if current_tile in (TileType.LEFT, TileType.RIGHT, TileType.UPLEFT,
+                            TileType.UPRIGHT, TileType.DOWNLEFT, TileType.DOWNRIGHT):
+                self.speed += 1
+                self.state_machine.handle_state_event(('TILE_EVENT', current_tile, self.speed))
+            self.time_elapsed = beat_index
+
+        self.state_machine.update()
+
+    def handle_event(self, key_state):
 
         # 낭떠러지 타일 놓기 처리
         if SDLK_k in key_state:

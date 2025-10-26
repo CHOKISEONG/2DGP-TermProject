@@ -21,9 +21,8 @@ def exit():
     pass
 
 def update():
-    # play_time = time.time()
     beat_index = music.get_current_beat()
-    player1.update()
+    player1.update(beat_index)
     pass
 
 def draw():
