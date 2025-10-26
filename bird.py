@@ -9,7 +9,6 @@ class AnimationController:
     def __init__(self, img_path):
         self.img = load_image(img_path)         # 이미지
         self.frame = 0                          # 현재 프레임
-        self.count = 0                          # 프레임 변화를 위한 카운트
         self.width, self.height = 60, 60        # 스프라이트의 가로,세로
         self.types = {
             'down': [(8, 240, self.width, self.height), (8, 160, self.width, self.height),
@@ -27,12 +26,11 @@ class AnimationController:
         self. frame = beat_index % len(self.types[self.current_type])
 
     def change_type(self, direction):
-        self.frame, self.count = 0, 0
+        self.frame= 0
         if direction in self.types:
             self.current_type = direction
 
-    def draw(self, area, pos):
-        x, y = area[pos]
+    def draw(self, x, y):
         self.img.clip_draw(*self.types[self.current_type][self.frame], x, y)
 
 class Bird:
@@ -44,12 +42,22 @@ class Bird:
             for y in range(18) for x in range(17)
         ]
         self.pos = 0
+        self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
+        self.target_pos = list(self.current_pos)
+        self.move_speed = 0.1
 
     def update(self, beat_index):
         self.img.update(beat_index)
+        for i in range(2):
+            diff = self.target_pos[i] - self.current_pos[i]
+            if abs(diff) > 0.5:
+                self.current_pos[i] += diff * self.move_speed
+            else:
+                self.current_pos[i] = self.target_pos[i]
 
     def draw(self):
-        self.img.draw(self.area, self.pos)
+        x, y = self.current_pos
+        self.img.draw(x,y)
 
     def pos_to_row_col(self, pos):
         return pos // 17, pos % 17
@@ -65,7 +73,9 @@ class Bird:
         else:
             ny, nx = y - 1, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def move_down_right(self):
         self.img.change_type('down')
@@ -75,7 +85,9 @@ class Bird:
         else:
             ny, nx = y - 1, x
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def move_up_left(self):
         self.img.change_type('up')
@@ -85,7 +97,9 @@ class Bird:
         else:
             ny, nx = y + 1, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def move_up_right(self):
         self.img.change_type('up')
@@ -95,23 +109,27 @@ class Bird:
         else:
             ny, nx = y + 1, x
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def move_left(self):
         self.img.change_type('left')
         y, x = self.pos_to_row_col(self.pos)
         ny, nx = y, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
-        else:
-            print("error")
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def move_right(self):
         self.img.change_type('right')
         y, x = self.pos_to_row_col(self.pos)
         ny, nx = y, x + 1
         if 0 <= ny < 18 and 0 <= nx < 17:
-            self.pos = self.row_col_to_pos(ny, nx)
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
 
     def get_pos(self):
         return self.pos
