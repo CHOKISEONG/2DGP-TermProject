@@ -1,10 +1,4 @@
-from sample import *
 from map import *
-
-LEFT = -1
-RIGHT = 1
-UP = 17
-DOWN = -17
 
 class AnimationController:
     def __init__(self, img_path):
@@ -19,17 +13,17 @@ class AnimationController:
             'right': [(248, 240, self.width, self.height), (248, 160, self.width, self.height),
                       (248, 80, self.width, self.height), (248, 0, self.width, self.height)],
             'up': [(168, 240, self.width, self.height), (168, 160, self.width, self.height),
-                   (8, 80, self.width, self.height), (88, 80, self.width, self.height)]
+                   (8, 80, self.width, self.height), (88, 80, self.width, self.height)],
         }
-        self.current_type = 'down'
+        self.current_type = 'right'
 
     def update(self, beat_index):
-        self. frame = beat_index % len(self.types[self.current_type])
+        self.frame = beat_index % len(self.types[self.current_type])
 
     def change_type(self, direction):
-        self.frame= 0
         if direction in self.types:
             self.current_type = direction
+            self.frame = 0
 
     def draw(self, x, y):
         self.img.clip_draw(*self.types[self.current_type][self.frame], x, y)
@@ -37,8 +31,8 @@ class AnimationController:
 class Bird:
     def __init__(self, img_path, field : Map):
         self.img = AnimationController('birdSheet/shovelBird.png')
-        self.sound = Sample('sound/walkSound.mp3')
         self.field: Map = field
+
         self.area = [
             ((40 + x * 42.7 + 21) if y % 2 == 1 else (40 + x * 42.7), 95 + y * 28)
             for y in range(18) for x in range(17)
@@ -46,8 +40,10 @@ class Bird:
         self.pos = 0
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
-        self.move_speed = 0.01
+        self.dir = 0 # 캐릭터가 이동한 방향쪽 각도를 나타냄 (ex: 왼쪽 위 이동하면 dir은 120)
+
         self.can_control = True
+        self.move_speed = 0.02
         self.auto_move_length = 3
         self.force_move_dir = None
         self.force_move_count = 0
@@ -72,6 +68,7 @@ class Bird:
         if beat_index != self.last_beat_idx:
             self.last_beat_idx = beat_index
             if self.force_move_count > 0:
+                self.can_control = False
                 if self.force_move_dir == 'left':
                     self.move_left()
                 elif self.force_move_dir == 'right':
@@ -85,9 +82,9 @@ class Bird:
                 elif self.force_move_dir == 'down_right':
                     self.move_down_right()
 
-                self.force_move_count -= 1  # 한 칸 이동했으니 남은 칸 수 감소
-                # 이동이 끝나면 direction 초기화
+                self.force_move_count -= 1
                 if self.force_move_count == 0:
+                    self.can_control = True
                     self.force_move_dir = None
 
         self.img.update(beat_index)
@@ -104,7 +101,6 @@ class Bird:
 
     def get_pos(self):
         row, col = self.pos_to_row_col(self.pos)
-        print(f'현재 위치: {row}, {col}')
         return row, col
 
     def pos_to_row_col(self, pos):
@@ -121,6 +117,7 @@ class Bird:
         else:
             ny, nx = y + 1, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 120
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -133,6 +130,7 @@ class Bird:
         else:
             ny, nx = y + 1, x
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 60
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -145,6 +143,7 @@ class Bird:
         else:
             ny, nx = y - 1, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 240
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -157,6 +156,7 @@ class Bird:
         else:
             ny, nx = y - 1, x
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 300
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -166,6 +166,7 @@ class Bird:
         y, x = self.pos_to_row_col(self.pos)
         ny, nx = y, x - 1
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 0
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -175,6 +176,7 @@ class Bird:
         y, x = self.pos_to_row_col(self.pos)
         ny, nx = y, x + 1
         if 0 <= ny < 18 and 0 <= nx < 17:
+            self.dir = 180
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
@@ -228,8 +230,8 @@ class Bird:
 
     def tile_right(self):
         self.img.change_type('right')
-        row, col = self.pos_to_row_col(self.pos)
-        ny, nx = row, col + 1
+        y, x = self.pos_to_row_col(self.pos)
+        ny, nx = y, x + 1
         if 0 <= ny < 18 and 0 <= nx < 17:
             self.field.change_tile(ny, nx, TileType.RIGHT)
 

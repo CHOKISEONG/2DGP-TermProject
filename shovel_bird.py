@@ -1,5 +1,6 @@
 from bird import Bird
-from pico2d import *
+from sample import *
+from map import TileType
 
 LEFT = -1
 RIGHT = 1
@@ -9,14 +10,21 @@ DOWN = -17
 class ShovelBird(Bird):
     def __init__(self, field):
         super().__init__('birdSheet/shovelBird.png', field)
+        self.tile_sound = Sample('sound/tileSound.mp3')
 
     def handle_event(self, key_state):
         # 조작 불가능한 상태면 그냥 리턴
         if not self.can_control:
+            key_state.clear()
             return
+
+        # 낭떠러지 타일 놓기 처리
+        if SDLK_k in key_state:
+            self.put_fall_tile()
 
         # 방향 타일 놓기 처리
         if SDLK_j in key_state:
+            self.tile_sound.play()
             if SDLK_w in key_state and SDLK_a in key_state:
                 self.tile_up_left()
             elif SDLK_w in key_state and SDLK_d in key_state:
@@ -44,3 +52,34 @@ class ShovelBird(Bird):
                 self.move_left()
             elif SDLK_d in key_state:
                 self.move_right()
+
+    def put_fall_tile(self):
+        print('Putting fall tile')
+        y, x = self.pos_to_row_col(self.pos)
+        nx, ny = 0, 0
+        if self.dir == 120:
+            if y % 2 == 1:
+                ny, nx = y + 1, x
+            else:
+                ny, nx = y + 1, x - 1
+        elif self.dir == 60:
+            if y % 2 == 1:
+                ny, nx = y + 1, x + 1
+            else:
+                ny, nx = y + 1, x
+        elif self.dir == 240:
+            if y % 2 == 1:
+                ny, nx = y - 1, x
+            else:
+                ny, nx = y - 1, x - 1
+        elif self.dir == 300:
+            if y % 2 == 1:
+                ny, nx = y - 1, x + 1
+            else:
+                ny, nx = y - 1, x
+        elif self.dir == 180:
+            ny, nx = y, x + 1
+        elif self.dir == 0:
+            ny, nx = y, x - 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            self.field.change_tile(ny, nx, TileType.FALL)

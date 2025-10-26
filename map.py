@@ -11,11 +11,13 @@ class TileType(Enum):
     DOWNRIGHT = 4
     LEFT = 5
     RIGHT = 6
+    FALL = 7
 
 class Map:
     def __init__(self):
         self.map = load_image('map/desert.png')
-        self.dir_img = load_image('UI/PS4_swipes.png')
+        self.img_direction = load_image('UI/PS4_swipes.png')
+        self.img_fall = load_image('UI/fall_tile.png')
         self.map_types = [
             [TileType.EMPTY for _ in range(17)]
             for _ in range(18)
@@ -40,17 +42,19 @@ class Map:
         if tile_type == TileType.EMPTY:
             return
         if tile_type == TileType.UPLEFT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, 2 * math.pi/3, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, 2 * math.pi / 3, 'None', pos_x, pos_y, draw_w, draw_h)
         elif tile_type == TileType.UPRIGHT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, math.pi/4, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, math.pi / 4, 'None', pos_x, pos_y, draw_w, draw_h)
         elif tile_type == TileType.DOWNLEFT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, -2 * math.pi/3, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, -2 * math.pi / 3, 'None', pos_x, pos_y, draw_w, draw_h)
         elif tile_type == TileType.DOWNRIGHT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, -math.pi/4, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, -math.pi / 4, 'None', pos_x, pos_y, draw_w, draw_h)
         elif tile_type == TileType.LEFT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, math.pi, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, math.pi, 'None', pos_x, pos_y, draw_w, draw_h)
         elif tile_type == TileType.RIGHT:
-            self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, 0, 'None', pos_x, pos_y, draw_w, draw_h)
+            self.img_direction.clip_composite_draw(0, 0, tile_w, tile_h, 0, 'None', pos_x, pos_y, draw_w, draw_h)
+        elif tile_type == TileType.FALL:
+            self.img_fall.clip_composite_draw(0, 0, 108, 108, 0, 'None', pos_x, pos_y, 50, 50)
 
     def get_tile(self, x, y):
         return self.map_types[x][y]
