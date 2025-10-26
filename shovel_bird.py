@@ -20,41 +20,44 @@ class ShovelBird(Bird):
 
         # 낭떠러지 타일 놓기 처리
         if SDLK_k in key_state:
+            print('Putting fall tile')
             self.put_fall_tile()
+            return
 
         # 방향 타일 놓기 처리
         if SDLK_j in key_state:
+            print('Putting dir tile')
             self.tile_sound.play()
-            if SDLK_w in key_state and SDLK_a in key_state:
-                self.tile_up_left()
-            elif SDLK_w in key_state and SDLK_d in key_state:
-                self.tile_up_right()
-            elif SDLK_a in key_state and SDLK_s in key_state:
-                self.tile_down_left()
-            elif SDLK_s in key_state and SDLK_d in key_state:
-                self.tile_down_right()
-            elif SDLK_a in key_state:
-                self.tile_left()
-            elif SDLK_d in key_state:
+            # 왜 왼쪽 오른쪽 방향이 각도 반대인지 모르겠음 일단 작동 제대로 됨
+            if self.dir == 180:
                 self.tile_right()
+            elif self.dir == 60:
+                self.tile_up_right()
+            elif self.dir == 120:
+                self.tile_up_left()
+            elif self.dir == 0:
+                self.tile_left()
+            elif self.dir == 240:
+                self.tile_down_left()
+            elif self.dir == 300:
+                self.tile_down_right()
+            return
 
         # 이동 처리
-        else:
-            if SDLK_w in key_state and SDLK_a in key_state:
-                self.move_up_left()
-            elif SDLK_w in key_state and SDLK_d in key_state:
-                self.move_up_right()
-            elif SDLK_a in key_state and SDLK_s in key_state:
-                self.move_down_left()
-            elif SDLK_s in key_state and SDLK_d in key_state:
-                self.move_down_right()
-            elif SDLK_a in key_state:
-                self.move_left()
-            elif SDLK_d in key_state:
-                self.move_right()
+        if SDLK_w in key_state and SDLK_a in key_state:
+            self.move_up_left()
+        elif SDLK_w in key_state and SDLK_d in key_state:
+            self.move_up_right()
+        elif SDLK_a in key_state and SDLK_s in key_state:
+            self.move_down_left()
+        elif SDLK_s in key_state and SDLK_d in key_state:
+            self.move_down_right()
+        elif SDLK_a in key_state:
+            self.move_left()
+        elif SDLK_d in key_state:
+            self.move_right()
 
     def put_fall_tile(self):
-        print('Putting fall tile')
         y, x = self.pos_to_row_col(self.pos)
         nx, ny = 0, 0
         if self.dir == 120:
