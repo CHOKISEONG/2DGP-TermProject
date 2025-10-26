@@ -1,7 +1,5 @@
-import pygame
 from pico2d import *
 from crowd import Crowd
-from black_bird import BlackBird
 from shovel_bird import ShovelBird
 from map import Map
 from musicManager import Music
@@ -30,6 +28,8 @@ def draw():
 def handle_events():
     global bg, player1, music, crowd
     result, diff = music.check_input_timing()
+    print(f'result: {result}, diff: {diff}')
+
     if result == "Miss":
         player1.handle_event(key_state)
         key_state.clear()
