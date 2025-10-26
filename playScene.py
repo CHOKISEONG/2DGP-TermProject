@@ -18,6 +18,7 @@ def exit():
     pass
 
 def update():
+    player1.update()
     pass
 
 def draw():

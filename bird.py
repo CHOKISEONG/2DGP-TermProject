@@ -9,20 +9,28 @@ class AnimationController:
     def __init__(self, img_path):
         self.img = load_image(img_path)         # 이미지
         self.frame = 0                          # 현재 프레임
+        self.count = 0                          # 프레임 변화를 위한 카운트
         self.width, self.height = 60, 60        # 스프라이트의 가로,세로
         self.types = {
             'down': [(8, 240, self.width, self.height), (8, 160, self.width, self.height),
                      (88, 240, self.width, self.height), (88, 160, self.width, self.height)],
-            'left': [(8, 0, self.width, self.height), (88, 0, self.width, self.height), (8, 0, self.width, self.height),
-                     (88, 0, self.width, self.height)],
+            'left': [(8, 0, self.width, self.height), (88, 0, self.width, self.height),
+                     (8, 0, self.width, self.height), (88, 0, self.width, self.height)],
             'right': [(248, 240, self.width, self.height), (248, 160, self.width, self.height),
                       (248, 80, self.width, self.height), (248, 0, self.width, self.height)],
             'up': [(168, 240, self.width, self.height), (168, 160, self.width, self.height),
                    (8, 80, self.width, self.height), (88, 80, self.width, self.height)]
-        }                      # 타입에 따른 이미지 위치 저장
+        }
         self.current_type = 'down'
 
+    def update(self):
+        self.count += 1
+        if self.count == 240:
+            self.count = 0
+            self. frame = (self.frame + 1) % len(self.types[self.current_type])
+
     def change_type(self, direction):
+        self.frame, self.count = 0, 0
         if direction in self.types:
             self.current_type = direction
 
@@ -39,6 +47,9 @@ class Bird:
             for y in range(18) for x in range(17)
         ]
         self.pos = 0
+
+    def update(self):
+        self.img.update()
 
     def draw(self):
         self.img.draw(self.area, self.pos)
