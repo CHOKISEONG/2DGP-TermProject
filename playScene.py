@@ -18,7 +18,7 @@ def exit():
     pass
 
 def update():
-    beat_index = music.get_current_beat() % 4
+    beat_index = music.get_current_beat()
     player1.update(beat_index)
     pass
 

@@ -52,5 +52,8 @@ class Map:
         elif tile_type == TileType.RIGHT:
             self.dir_img.clip_composite_draw(0, 0, tile_w, tile_h, 0, 'None', pos_x, pos_y, draw_w, draw_h)
 
+    def get_tile(self, x, y):
+        return self.map_types[x][y]
+
     def change_tile(self, x, y, tile_type):
         self.map_types[x][y] = tile_type

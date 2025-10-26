@@ -1,5 +1,6 @@
 from sample import *
-from map import TileType
+from map import *
+
 LEFT = -1
 RIGHT = 1
 UP = 17
@@ -34,10 +35,10 @@ class AnimationController:
         self.img.clip_draw(*self.types[self.current_type][self.frame], x, y)
 
 class Bird:
-    def __init__(self, img_path, field):
+    def __init__(self, img_path, field : Map):
         self.img = AnimationController('birdSheet/shovelBird.png')
         self.sound = Sample('sound/walkSound.mp3')
-        self.field = field
+        self.field: Map = field
         self.area = [
             ((40 + x * 42.7 + 21) if y % 2 == 1 else (40 + x * 42.7), 95 + y * 28)
             for y in range(18) for x in range(17)
@@ -45,9 +46,50 @@ class Bird:
         self.pos = 0
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
-        self.move_speed = 0.1
+        self.move_speed = 0.01
+        self.can_control = True
+        self.auto_move_length = 3
+        self.force_move_dir = None
+        self.force_move_count = 0
+        self.last_beat_idx = -1
 
     def update(self, beat_index):
+        # 이동 타일 밟는거 처리
+        current_tile = self.field.get_tile(*self.get_pos())
+        if current_tile == TileType.LEFT:
+            self.force_move('left', self.auto_move_length)
+        elif current_tile == TileType.RIGHT:
+            self.force_move('right', self.auto_move_length)
+        elif current_tile == TileType.UPLEFT:
+            self.force_move('up_left', self.auto_move_length)
+        elif current_tile == TileType.UPRIGHT:
+            self.force_move('up_right', self.auto_move_length)
+        elif current_tile == TileType.DOWNLEFT:
+            self.force_move('down_left', self.auto_move_length)
+        elif current_tile == TileType.DOWNRIGHT:
+            self.force_move('down_right', self.auto_move_length)
+
+        if beat_index != self.last_beat_idx:
+            self.last_beat_idx = beat_index
+            if self.force_move_count > 0:
+                if self.force_move_dir == 'left':
+                    self.move_left()
+                elif self.force_move_dir == 'right':
+                    self.move_right()
+                elif self.force_move_dir == 'up_left':
+                    self.move_up_left()
+                elif self.force_move_dir == 'up_right':
+                    self.move_up_right()
+                elif self.force_move_dir == 'down_left':
+                    self.move_down_left()
+                elif self.force_move_dir == 'down_right':
+                    self.move_down_right()
+
+                self.force_move_count -= 1  # 한 칸 이동했으니 남은 칸 수 감소
+                # 이동이 끝나면 direction 초기화
+                if self.force_move_count == 0:
+                    self.force_move_dir = None
+
         self.img.update(beat_index)
         for i in range(2):
             diff = self.target_pos[i] - self.current_pos[i]
@@ -190,3 +232,7 @@ class Bird:
         ny, nx = row, col + 1
         if 0 <= ny < 18 and 0 <= nx < 17:
             self.field.change_tile(ny, nx, TileType.RIGHT)
+
+    def force_move(self, direction, length):
+        self.force_move_dir = direction
+        self.force_move_count = length

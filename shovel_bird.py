@@ -11,6 +11,10 @@ class ShovelBird(Bird):
         super().__init__('birdSheet/shovelBird.png', field)
 
     def handle_event(self, key_state):
+        # 조작 불가능한 상태면 그냥 리턴
+        if not self.can_control:
+            return
+
         # 방향 타일 놓기 처리
         if SDLK_j in key_state:
             if SDLK_w in key_state and SDLK_a in key_state:
@@ -25,6 +29,7 @@ class ShovelBird(Bird):
                 self.tile_left()
             elif SDLK_d in key_state:
                 self.tile_right()
+
         # 이동 처리
         else:
             if SDLK_w in key_state and SDLK_a in key_state:
