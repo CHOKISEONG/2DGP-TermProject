@@ -23,11 +23,8 @@ class AnimationController:
         }
         self.current_type = 'down'
 
-    def update(self):
-        self.count += 1
-        if self.count == 240:
-            self.count = 0
-            self. frame = (self.frame + 1) % len(self.types[self.current_type])
+    def update(self, beat_index):
+        self. frame = beat_index % len(self.types[self.current_type])
 
     def change_type(self, direction):
         self.frame, self.count = 0, 0
@@ -48,8 +45,8 @@ class Bird:
         ]
         self.pos = 0
 
-    def update(self):
-        self.img.update()
+    def update(self, beat_index):
+        self.img.update(beat_index)
 
     def draw(self):
         self.img.draw(self.area, self.pos)

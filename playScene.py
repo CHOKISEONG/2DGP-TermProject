@@ -18,7 +18,8 @@ def exit():
     pass
 
 def update():
-    player1.update()
+    beat_index = music.get_current_beat()
+    player1.update(beat_index)
     pass
 
 def draw():
@@ -29,7 +30,6 @@ def draw():
 def handle_events():
     global bg, player1, music, crowd
     result, diff = music.check_input_timing()
-    print(f'result: {result}, diff: {diff}')
 
     if result == "Miss":
         player1.handle_event(key_state)
