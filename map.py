@@ -17,7 +17,7 @@ class Map:
         self.map = load_image('map/desert.png')
         self.dir_img = load_image('UI/PS4_swipes.png')
         self.map_types = [
-            [choice(list(TileType)) for _ in range(17)]
+            [TileType.EMPTY for _ in range(17)]
             for _ in range(18)
         ]
         self.map_pos = [

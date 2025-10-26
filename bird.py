@@ -59,35 +59,16 @@ class Bird:
         x, y = self.current_pos
         self.img.draw(x,y)
 
+    def get_pos(self):
+        return self.pos
+    def set_pos(self, pos):
+        self.pos = pos
+
     def pos_to_row_col(self, pos):
         return pos // 17, pos % 17
 
     def row_col_to_pos(self, row, col):
         return row * 17 + col
-
-    def move_down_left(self):
-        self.img.change_type('down')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y - 1, x
-        else:
-            ny, nx = y - 1, x - 1
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            new_pos = self.row_col_to_pos(ny, nx)
-            self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])
-
-    def move_down_right(self):
-        self.img.change_type('down')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y - 1, x + 1
-        else:
-            ny, nx = y - 1, x
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            new_pos = self.row_col_to_pos(ny, nx)
-            self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])
 
     def move_up_left(self):
         self.img.change_type('up')
@@ -113,6 +94,30 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
 
+    def move_down_left(self):
+        self.img.change_type('down')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y - 1, x
+        else:
+            ny, nx = y - 1, x - 1
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])
+
+    def move_down_right(self):
+        self.img.change_type('down')
+        y, x = self.pos_to_row_col(self.pos)
+        if y % 2 == 1:
+            ny, nx = y - 1, x + 1
+        else:
+            ny, nx = y - 1, x
+        if 0 <= ny < 18 and 0 <= nx < 17:
+            new_pos = self.row_col_to_pos(ny, nx)
+            self.pos = new_pos
+            self.target_pos = list(self.area[new_pos])
+
     def move_left(self):
         self.img.change_type('left')
         y, x = self.pos_to_row_col(self.pos)
@@ -131,8 +136,15 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
 
-    def get_pos(self):
-        return self.pos
-    def set_pos(self, pos):
-        self.pos = pos
-
+    def tile_up_left(self):
+        pass
+    def tile_up_right(self):
+        pass
+    def tile_down_left(self):
+        pass
+    def tile_down_right(self):
+        pass
+    def tile_left(self):
+        pass
+    def tile_right(self):
+        pass
