@@ -75,7 +75,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def move_down_right(self):
         self.img.change_type('down')
@@ -87,7 +87,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def move_up_left(self):
         self.img.change_type('up')
@@ -99,7 +99,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def move_up_right(self):
         self.img.change_type('up')
@@ -111,7 +111,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def move_left(self):
         self.img.change_type('left')
@@ -120,7 +120,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def move_right(self):
         self.img.change_type('right')
@@ -129,7 +129,7 @@ class Bird:
         if 0 <= ny < 18 and 0 <= nx < 17:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
-            self.target_pos = list(self.area[new_pos])  # 실제 좌표 기준 목표 위치
+            self.target_pos = list(self.area[new_pos])
 
     def get_pos(self):
         return self.pos
