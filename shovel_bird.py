@@ -27,7 +27,7 @@ class Idle:
             self.start_time = get_time()
             self.bird.img.update()
     def draw(self):
-        self.bird.img.draw()
+        self.bird.img.draw(*self.bird.current_pos)
 
 # 타일 놓는 행동을 할 때
 class PlaceTile:
@@ -42,6 +42,7 @@ class PlaceTile:
 
     def enter(self, event):
         self.start_time = get_time()
+        self.dy = 0
         key_state = event[1]
 
         # 누른 방향을 바라보게
@@ -138,24 +139,24 @@ class PlaceTile:
                     self.bird.field.change_tile(ny, nx, Tile.LEFT)
             return
 
-
     def exit(self, event):
         pass
 
 
     def do(self):
         self.elapsed_time = get_time() - self.start_time
-        if self.elapsed_time < self.one_beat/4:
-            self.dy += 2
-        elif self.elapsed_time < self.one_beat/2:
-            self.dy -= 2
+        if self.elapsed_time < 0.1:
+            self.dy += 0.03
+        elif self.elapsed_time < 0.2:
+            self.dy -= 0.03
         else:
             self.bird.state_machine.handle_state_event(('IDLE', None))
 
 
     def draw(self):
-        print(self.dy)
-        self.bird.draw(0,self.dy)
+        x,y = self.bird.current_pos
+        self.bird.img.draw(x,y + self.dy)
+
 
 # 이동키 처리
 class Move:
@@ -193,15 +194,18 @@ class Move:
         self.bird.state_machine.handle_state_event(('IDLE', None))
 
     def draw(self):
-        self.bird.img.draw()
+        self.bird.img.draw(*self.bird.current_pos)
+
 
 # 특수타일을 밟을 때
 class TileEvent:
     def __init__(self, bird):
         self.bird = bird
         self.start_time = get_time()
-        self.dir = ['down','left','up','right']
-        self.dir_idx = 0
+
+        self.rotate = ['down','left','up','right']
+        self.rotate_idx = 0
+
         self.speed = 0
         self.time_left = 0
         self.type = None
@@ -225,8 +229,8 @@ class TileEvent:
         if get_time() - self.start_time > 1 / self.speed:
             self.start_time = get_time()
             self.bird.move(self.bird.look)
-            self.dir_idx = (self.dir_idx + 1) % len(self.dir)
-            new_direction = self.dir[self.dir_idx]
+            self.rotate_idx = (self.rotate_idx + 1) % len(self.rotate)
+            new_direction = self.rotate[self.rotate_idx]
             self.bird.img.change_type(new_direction)
             self.time_left -= 1
 
@@ -236,7 +240,8 @@ class TileEvent:
             self.bird.state_machine.handle_state_event(('TILE_EVENT', current_tile, self.speed))
 
     def draw(self):
-        self.bird.img.draw()
+        self.bird.img.draw(*self.bird.current_pos)
+
 
 # 맵에서 떨어질 때
 class Fall:
@@ -248,15 +253,16 @@ class Fall:
     def enter(self, event):
         self.start_time = get_time()
 
-
     def exit(self, event):
         pass
+
     def do(self):
         if get_time() - self.start_time > 0.3:
             self.bird.img.update()
         self.bird.state_machine.handle_state_event(('IDLE',None))
+
     def draw(self):
-        self.bird.img.draw()
+        self.bird.img.draw(*self.bird.current_pos)
 
 
 class ShovelBird(Bird):
@@ -303,7 +309,6 @@ class ShovelBird(Bird):
 
         # 타일 놓기 처리
         if SDLK_j in key_state or SDLK_k in key_state:
-            print('Putting tile')
             self.tile_sound.play()
             self.state_machine.handle_state_event(('PLACE_TILE', key_state))
             return
@@ -311,6 +316,8 @@ class ShovelBird(Bird):
         # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
         if (SDLK_w in key_state or SDLK_a in key_state
             or SDLK_s in key_state or SDLK_d in key_state):
-            print('Move')
             self.state_machine.handle_state_event(('MOVE', key_state))
+
+    def draw(self):
+        self.state_machine.draw()
 

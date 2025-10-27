@@ -47,10 +47,6 @@ class Bird:
         self.move_speed = 0.05
         self.last_beat_idx = -1
 
-    def draw(self, dx = 0, dy = 0):
-        x, y = self.current_pos
-        self.img.draw(x,y)
-
     def get_pos(self):
         row, col = self.pos_to_row_col(self.pos)
         return row, col
