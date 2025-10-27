@@ -39,12 +39,12 @@ class Bird:
             ((40 + x * 42.7 + 21) if y % 2 == 1 else (40 + x * 42.7), 95 + y * 28)
             for y in range(18) for x in range(17)
         ]
-        self.pos = 0
+        self.pos = 180
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
-        self.dir = 0 # 캐릭터가 이동한 방향을 나타냄
+        self.look = DIRECTION.NONE
 
-        self.move_speed = 0.02
+        self.move_speed = 0.05
         self.last_beat_idx = -1
 
     def draw(self, dx = 0, dy = 0):
@@ -61,18 +61,19 @@ class Bird:
     def row_col_to_pos(self, row, col):
         return row * 17 + col
 
+    # 고치기
     def move(self, direction):
-        if direction == TileType.UPLEFT:
+        if direction == DIRECTION.UP_LEFT:
             self.move_up_left()
-        elif direction == TileType.UPRIGHT:
+        elif direction == DIRECTION.UP_RIGHT:
             self.move_up_right()
-        elif direction == TileType.DOWNLEFT:
+        elif direction == DIRECTION.DOWN_LEFT:
             self.move_down_left()
-        elif direction == TileType.DOWNRIGHT:
+        elif direction == DIRECTION.DOWN_RIGHT:
             self.move_down_right()
-        elif direction == TileType.LEFT:
+        elif direction == DIRECTION.LEFT:
             self.move_left()
-        elif direction == TileType.RIGHT:
+        elif direction == DIRECTION.RIGHT:
             self.move_right()
 
     def move_up_left(self):

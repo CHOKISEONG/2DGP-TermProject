@@ -7,7 +7,7 @@ import game_world
 import time
 
 key_state = set()
-miss_handled = False
+is_miss = False
 
 def enter():
     global music, player1, bg, crowd
@@ -22,28 +22,30 @@ def enter():
     game_world.add_object(crowd, 1)
 
 def exit():
-    pass
+    close_canvas()
 
 def update():
-    beat_index = music.get_current_beat()
-    player1.update(beat_index)
+    player1.update(music.get_current_beat())
 
 def draw():
     game_world.render()
 
 def handle_events():
-    global miss_handled
+    global is_miss
     result, diff = music.check_input_timing()
 
     # 키 입력 처리
     if result == "Miss":
-        if not miss_handled:
+        if not is_miss:
             player1.handle_key(key_state)
             key_state.clear()
-            miss_handled = True
+            is_miss = True
     else:
-        miss_handled = False
+        is_miss = False
         if result == "Good" or result == "Perfect":
             for event in get_events():
+                if event.key == SDLK_ESCAPE:
+                    exit()
                 if event.type == SDL_KEYDOWN:
                     key_state.add(event.key)
+
