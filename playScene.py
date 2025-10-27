@@ -16,10 +16,10 @@ def enter():
     bg = Map()
     player1 = ShovelBird(bg)
     crowd = Crowd()
+
     game_world.add_object(bg, 0)
     game_world.add_object(player1, 1)
     game_world.add_object(crowd, 1)
-    play_time = time.time()
 
 def exit():
     pass

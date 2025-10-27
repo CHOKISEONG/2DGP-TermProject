@@ -42,7 +42,7 @@ class Bird:
         self.pos = 0
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
-        self.dir = 0 # 캐릭터가 이동한 방향쪽 각도를 나타냄 (ex: 왼쪽 위 이동하면 dir은 120)
+        self.dir = 0 # 캐릭터가 이동한 방향을 나타냄
 
         self.move_speed = 0.02
         self.last_beat_idx = -1
