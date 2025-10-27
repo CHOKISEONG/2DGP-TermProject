@@ -4,7 +4,6 @@ from pico2d import *
 def get_random_pos():
     points = [(5, 20), (790, 20), (790, 595), (5, 595)]
     edges = [
-        (points[0], points[1]),
         (points[1], points[2]),
         (points[2], points[3]),
         (points[3], points[0]),
@@ -16,7 +15,6 @@ def get_random_pos():
     y = y1 + (y2 - y1) * t
     return x, y
 
-
 class Crowd:
     bird_names = ["budgie", "cockatiel", "duck", "parrot", "robin", "sparrow", "toucan"]
 
@@ -25,6 +23,13 @@ class Crowd:
         self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
         self.w, self.h = 48, 48
         self.cx, self.cy = 400, 300  # 중앙 좌표
+        self.last_beat_idx = -1
+        self.size = 1
+
+    def update(self, beat_idx):
+        if self.last_beat_idx != beat_idx:
+            self.size = 1.1 if self.size == 1 else 1
+            self.last_beat_idx = beat_idx
 
     def draw(self):
         for i in range(15):
@@ -44,5 +49,5 @@ class Crowd:
                     0, 0, self.w, self.h,
                     rad, flip,
                     x, y,
-                    self.w, self.h
+                    self.w * self.size, self.h * self.size
                 )

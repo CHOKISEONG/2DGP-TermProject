@@ -1,6 +1,6 @@
 # layer 0 : Background object
 # layer 1 : player object
-# layer 2 : Foreground object
+# layer 2 : UI object
 
 world = [[], [], []] # 게임내 객체들을 담는 리스트
 
@@ -20,10 +20,10 @@ def remove_object(o):
 def remove_all():
     world.clear()
 
-def update():
+def update(beat_idx):
     for layer in world:
         for o in layer:
-            o.update()
+            o.update(beat_idx)
 
 def render():
     for layer in world:

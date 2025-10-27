@@ -271,6 +271,7 @@ class ShovelBird(Bird):
         self.tile_sound = Sample('sound/tileSound.mp3')
         self.time_elapsed = -1
         self.speed = 3
+
         self.IDLE = Idle(self)
         self.MOVE = Move(self)
         self.PLACE_TILE = PlaceTile(self)

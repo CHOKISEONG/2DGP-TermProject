@@ -50,3 +50,6 @@ class Map:
 
     def change_tile(self, x, y, tile_type):
         self.map_types[x][y] = tile_type
+
+    def update(self, beat_idx):
+        pass
