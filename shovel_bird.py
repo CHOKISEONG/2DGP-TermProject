@@ -3,7 +3,8 @@ from sample import *
 from map import TileType
 from state_machine import StateMachine
 
-can_move = lambda e : e[0] == 'CAN_MOVE'
+place_tile = lambda e : e[0] == 'PLACE_TILE'
+idle = lambda e : e[0] == 'IDLE'
 tile_event = lambda e : e[0] == 'TILE_EVENT'
 fall = lambda e : e[0] == 'FALL'
 resurrection = lambda e : e[0] == 'RESURRECTION'
@@ -25,6 +26,79 @@ class Idle:
             self.bird.img.update()
     def draw(self):
         self.bird.img.draw()
+
+class PlaceTile:
+    def __init__(self, bird):
+        self.bird = bird
+        self.start_time = get_time()
+        self.elapsed_time = 0
+        self.one_beat = 120 / self.bird.bpm
+        self.dy = 0
+    def enter(self, event):
+        key_state = event[1]
+        if SDLK_w in key_state and SDLK_a in key_state:
+            self.bird.img.change_type('up')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            if y % 2 == 1:
+                ny, nx = y + 1, x
+            else:
+                ny, nx = y + 1, x - 1
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.UPLEFT)
+        elif SDLK_w in key_state and SDLK_d in key_state:
+            self.bird.img.change_type('up')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            if y % 2 == 1:
+                ny, nx = y + 1, x + 1
+            else:
+                ny, nx = y + 1, x
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.UPRIGHT)
+        elif SDLK_a in key_state and SDLK_s in key_state:
+            self.bird.img.change_type('down')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            if y % 2 == 1:
+                ny, nx = y - 1, x
+            else:
+                ny, nx = y - 1, x - 1
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.DOWNLEFT)
+        elif SDLK_s in key_state and SDLK_d in key_state:
+            self.bird.img.change_type('down')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            if y % 2 == 1:
+                ny, nx = y - 1, x + 1
+            else:
+                ny, nx = y - 1, x
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.DOWNRIGHT)
+        elif SDLK_a in key_state:
+            self.bird.img.change_type('left')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            ny, nx = y, x - 1
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.LEFT)
+        elif SDLK_d in key_state:
+            self.bird.img.change_type('right')
+            y, x = self.bird.pos_to_row_col(self.bird.pos)
+            ny, nx = y, x + 1
+            if 0 <= ny < 18 and 0 <= nx < 17:
+                self.bird.field.change_tile(ny, nx, TileType.RIGHT)
+    def exit(self, event):
+        pass
+
+    def do(self):
+        self.elapsed_time = get_time() - self.start_time
+        print(self.elapsed_time)
+        if self.elapsed_time < self.one_beat/4:
+            print('2')
+            self.bird.img.update()
+            self.dy += 1
+        elif self.elapsed_time < self.one_beat/2:
+            print('1')
+            self.dy -= 1
+    def draw(self):
+        self.bird.img.draw(0,self.dy)
 
 class Move:
     def __init__(self, bird):
@@ -104,13 +178,15 @@ class ShovelBird(Bird):
         self.time_elapsed = -1
         self.speed = 3
         self.IDLE = Idle(self)
+        self.PLACE_TILE = PlaceTile(self)
         self.TILE_EVENT = TileEvent(self)
         self.FALL = Fall(self)
         self.state_machine = StateMachine(
             self.IDLE,
        {
-                self.IDLE: {tile_event: self.TILE_EVENT},
-                self.TILE_EVENT: {can_move: self.IDLE, fall: self.FALL, tile_event: self.TILE_EVENT},
+                self.IDLE: {tile_event: self.TILE_EVENT, place_tile: self.PLACE_TILE},
+                self.PLACE_TILE: {idle: self.IDLE, place_tile:self.PLACE_TILE},
+                self.TILE_EVENT: {idle: self.IDLE, fall: self.FALL, tile_event: self.TILE_EVENT},
                 self.FALL: {resurrection: self.IDLE}
             }
         )
@@ -134,7 +210,8 @@ class ShovelBird(Bird):
 
         self.state_machine.update()
 
-    def handle_event(self, key_state):
+    def handle_key(self, key_state):
+        if self.state_machine.cur_state == self.TILE_EVENT: return
 
         # 낭떠러지 타일 놓기 처리
         if SDLK_k in key_state:
@@ -146,22 +223,10 @@ class ShovelBird(Bird):
         if SDLK_j in key_state:
             print('Putting dir tile')
             self.tile_sound.play()
-            # 왜 왼쪽 오른쪽 방향이 각도 반대인지 모르겠음 일단 작동 제대로 됨
-            if self.dir == 180:
-                self.tile_right()
-            elif self.dir == 60:
-                self.tile_up_right()
-            elif self.dir == 120:
-                self.tile_up_left()
-            elif self.dir == 0:
-                self.tile_left()
-            elif self.dir == 240:
-                self.tile_down_left()
-            elif self.dir == 300:
-                self.tile_down_right()
+            self.state_machine.handle_state_event(('PLACE_TILE', key_state))
             return
 
-        # 이동 처리
+        # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
         if SDLK_w in key_state and SDLK_a in key_state:
             self.move_up_left()
         elif SDLK_w in key_state and SDLK_d in key_state:

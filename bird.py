@@ -47,7 +47,7 @@ class Bird:
         self.move_speed = 0.02
         self.last_beat_idx = -1
 
-    def draw(self):
+    def draw(self, dx = 0, dy = 0):
         x, y = self.current_pos
         self.img.draw(x,y)
 
@@ -146,57 +146,3 @@ class Bird:
             new_pos = self.row_col_to_pos(ny, nx)
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
-
-    def tile_up_left(self):
-        self.img.change_type('up')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y + 1, x
-        else:
-            ny, nx = y + 1, x - 1
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.UPLEFT)
-
-    def tile_up_right(self):
-        self.img.change_type('up')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y + 1, x + 1
-        else:
-            ny, nx = y + 1, x
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.UPRIGHT)
-
-    def tile_down_left(self):
-        self.img.change_type('down')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y - 1, x
-        else:
-            ny, nx = y - 1, x - 1
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.DOWNLEFT)
-
-    def tile_down_right(self):
-        self.img.change_type('down')
-        y, x = self.pos_to_row_col(self.pos)
-        if y % 2 == 1:
-            ny, nx = y - 1, x + 1
-        else:
-            ny, nx = y - 1, x
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.DOWNRIGHT)
-
-    def tile_left(self):
-        self.img.change_type('left')
-        y, x = self.pos_to_row_col(self.pos)
-        ny, nx = y, x - 1
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.LEFT)
-
-    def tile_right(self):
-        self.img.change_type('right')
-        y, x = self.pos_to_row_col(self.pos)
-        ny, nx = y, x + 1
-        if 0 <= ny < 18 and 0 <= nx < 17:
-            self.field.change_tile(ny, nx, TileType.RIGHT)

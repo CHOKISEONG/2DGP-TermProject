@@ -3,6 +3,7 @@ from crowd import Crowd
 from shovel_bird import ShovelBird
 from map import Map
 from musicManager import Music
+import game_world
 import time
 
 key_state = set()
@@ -15,6 +16,9 @@ def enter():
     bg = Map()
     player1 = ShovelBird(bg)
     crowd = Crowd()
+    game_world.add_object(bg, 0)
+    game_world.add_object(player1, 1)
+    game_world.add_object(crowd, 1)
     play_time = time.time()
 
 def exit():
@@ -23,12 +27,9 @@ def exit():
 def update():
     beat_index = music.get_current_beat()
     player1.update(beat_index)
-    pass
 
 def draw():
-    bg.draw()
-    player1.draw()
-    crowd.draw()
+    game_world.render()
 
 def handle_events():
     global miss_handled
@@ -37,7 +38,7 @@ def handle_events():
     # 키 입력 처리
     if result == "Miss":
         if not miss_handled:
-            player1.handle_event(key_state)
+            player1.handle_key(key_state)
             key_state.clear()
             miss_handled = True
     else:
