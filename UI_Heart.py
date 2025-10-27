@@ -9,12 +9,12 @@ class Bar:
             Bar.img = load_image('UI/bpm_bar.png')
         self.area = (0, 0, 64, 64)
         self.x = x
-        self.dx = 0.1 if self.x == 250 else -0.1
+        self.dx = 3 if self.x == 220 else -3
         self.y = 30
-        self.size = 70
+        self.size = 40
 
     def update(self, beat_idx):
-        if 399 < self.x < 401:
+        if 397 < self.x < 403:
             game_world.remove_object(self)
         else:
             self.x += self.dx
@@ -40,7 +40,7 @@ class UI_Heart():
         self.img_heart.clip_draw(*self.area,*self.heart_pos,self.size,self.size)
 
     def generate_bar(self):
-        bar1 = Bar(250)
-        bar2 = Bar(550)
+        bar1 = Bar(220)
+        bar2 = Bar(580)
         game_world.add_object(bar1)
         game_world.add_object(bar2)
