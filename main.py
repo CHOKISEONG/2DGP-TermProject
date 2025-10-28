@@ -1,8 +1,11 @@
+from pico2d import *
 import framework
-import playScene
+import play_scene as start_scene
 
 def main():
-    framework.run(playScene)
+    open_canvas()
+    framework.run(start_scene)
+    close_canvas()
 
 if __name__ == '__main__':
     main()

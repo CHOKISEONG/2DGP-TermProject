@@ -10,7 +10,7 @@ import time
 key_state = set()
 is_miss = False
 
-def enter():
+def init():
     global music, player1, bg, crowd, heart_ui
     music = Music('sound/120bpm_GerudoValley.wav', 120)
     music.play(repeat=True)
@@ -24,8 +24,8 @@ def enter():
     game_world.add_object(crowd, 1)
     game_world.add_object(heart_ui, 2)
 
-def exit():
-    close_canvas()
+def finish():
+    del music, player1, bg, crowd, heart_ui
 
 def update():
     game_world.update(music.get_current_beat())
@@ -52,3 +52,7 @@ def handle_events():
                 if event.type == SDL_KEYDOWN:
                     key_state.add(event.key)
 
+def pause():
+    pass
+def resume():
+    pass
