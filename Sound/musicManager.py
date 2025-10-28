@@ -1,8 +1,8 @@
 from pico2d import *
+from Sound.bpm import Bpm
 import time
-import bpm
 
-class Music(bpm.Bpm):
+class Music(Bpm):
     def __init__(self, file_path, beat):
         super().__init__(beat)
         self.music = load_wav(file_path)

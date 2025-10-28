@@ -19,7 +19,7 @@ class Crowd:
     bird_names = ["budgie", "cockatiel", "duck", "parrot", "robin", "sparrow", "toucan"]
 
     def __init__(self):
-        self.images = {name: load_image(f"birdSheet/{name.capitalize()}.png") for name in self.bird_names}
+        self.images = {name: load_image(f"Character/image/{name.capitalize()}.png") for name in self.bird_names}
         self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
         self.w, self.h = 48, 48
         self.cx, self.cy = 400, 300  # 중앙 좌표

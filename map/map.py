@@ -1,12 +1,12 @@
 from pico2d import *
-from myEnum import *
+from Global.myEnum import *
 import math
 
 class Map:
     def __init__(self):
-        self.map = load_image('map/desert.png')
-        self.img_direction = load_image('UI/PS4_swipes.png')
-        self.img_fall = load_image('UI/fall_tile.png')
+        self.map = load_image('map/image/desert.png')
+        self.img_direction = load_image('UI/image/PS4_swipes.png')
+        self.img_fall = load_image('UI/image/fall_tile.png')
         self.map_types = [
             [Tile.EMPTY for _ in range(17)]
             for _ in range(18)

@@ -1,6 +1,7 @@
 from pico2d import *
 import framework
-import play_scene as start_scene
+from Scene import play_scene as start_scene
+
 
 def main():
     open_canvas()

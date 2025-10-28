@@ -6,7 +6,7 @@ class LineBar:
 
     def __init__(self):
         if not LineBar.img:
-            LineBar.img = load_image('UI/bpm_bar2.png')
+            LineBar.img = load_image('UI/image/bpm_bar2.png')
         self.last_beat_idx = -1
         self.area = (0, 0, 64, 64)
         self.x = 400
@@ -22,7 +22,7 @@ class Bar:
 
     def __init__(self, x, is_move = True):
         if not Bar.img:
-            Bar.img = load_image('UI/bpm_bar.png')
+            Bar.img = load_image('UI/image/bpm_bar.png')
         self.area = (0, 0, 64, 64)
         self.x = x
         self.dx = 3 if self.x == 220 else -3
@@ -42,7 +42,7 @@ class Bar:
 
 class UI_Heart():
     def __init__(self):
-        self.img_heart = load_image('UI/heart.png')
+        self.img_heart = load_image('UI/image/heart.png')
         self.img_line = LineBar()
         self.img_line2 = Bar(210,False)
         self.img_line3 = Bar(590, False)

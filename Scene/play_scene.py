@@ -1,18 +1,17 @@
 from pico2d import *
-from crowd import Crowd
-from shovel_bird import ShovelBird
-from map import Map
-from musicManager import Music
-from UI_Heart import UI_Heart
+from Character.crowd import Crowd
+from Character.shovel_bird import ShovelBird
+from map.map import Map
+from Sound.musicManager import Music
+from UI.UI_Heart import UI_Heart
 import game_world
-import time
 
 key_state = set()
 is_miss = False
 
 def init():
     global music, player1, bg, crowd, heart_ui
-    music = Music('sound/120bpm_GerudoValley.wav', 120)
+    music = Music('Sound/music/120bpm_GerudoValley.wav', 120)
     music.play(repeat=True)
     bg = Map()
     heart_ui = UI_Heart()

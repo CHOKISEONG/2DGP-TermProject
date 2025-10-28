@@ -1,7 +1,7 @@
-from bird import Bird
-from sample import *
+from Character.bird import Bird
+from Sound.sample import *
 from state_machine import StateMachine
-from myEnum import *
+from Global.myEnum import *
 
 idle = lambda e : e[0] == 'IDLE'
 move = lambda e : e[0] == 'MOVE'
@@ -279,8 +279,8 @@ class Fall:
 
 class ShovelBird(Bird):
     def __init__(self, field):
-        super().__init__('birdSheet/shovelBird.png', field)
-        self.tile_sound = Sample('sound/tileSound.mp3')
+        super().__init__('image/shovelBird.png', field)
+        self.tile_sound = Sample('Sound/sample/tileSound.mp3')
         self.time_elapsed = -1
         self.speed = 3
         self.tile_speed = 2

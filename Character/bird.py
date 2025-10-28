@@ -1,4 +1,4 @@
-from map import *
+from map.map import *
 
 class AnimationController:
     def __init__(self, img_path):
@@ -32,7 +32,7 @@ class AnimationController:
 
 class Bird:
     def __init__(self, img_path, field : Map):
-        self.img = AnimationController('birdSheet/shovelBird.png')
+        self.img = AnimationController('Character/image/shovelBird.png')
         self.field: Map = field
         self.bpm = 120
         self.area = [
