@@ -6,8 +6,8 @@ class StateMachine:
         self.rules = rules
         self.cur_state.enter(('START', None))
 
-    def update(self):
-        self.cur_state.do()
+    def update(self, beat_idx):
+        self.cur_state.do(beat_idx)
 
     def handle_state_event(self, state_event):
         for check_event in self.rules[self.cur_state].keys():

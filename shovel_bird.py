@@ -15,17 +15,25 @@ class Idle:
     def __init__(self, bird):
         self.bird = bird
         self.start_time = get_time()
-        self.elapsed_time = 0
+        self.time_elapsed = 0
         self.one_beat = 120 / self.bird.bpm
     def enter(self, event):
         pass
     def exit(self, event):
         pass
-    def do(self):
-        self.elapsed_time = get_time() - self.start_time
-        if self.elapsed_time > self.one_beat/4:
+    def do(self, beat_idx):
+        self.time_elapsed = get_time() - self.start_time
+        if self.time_elapsed > self.one_beat/4:
             self.start_time = get_time()
             self.bird.img.update()
+        # 이동 타일 밟는거 처리
+        if self.time_elapsed != beat_idx:
+            current_tile = self.bird.field.get_tile(*self.bird.get_pos())
+            if current_tile in (Tile.LEFT, Tile.RIGHT, Tile.UP_LEFT,
+                                Tile.UP_RIGHT, Tile.DOWN_LEFT, Tile.DOWN_RIGHT):
+                self.bird.tile_speed += 1
+                self.bird.state_machine.handle_state_event(('TILE_EVENT', current_tile, self.bird.tile_speed))
+            self.time_elapsed = beat_idx
     def draw(self):
         self.bird.img.draw(*self.bird.current_pos)
 
@@ -143,7 +151,7 @@ class PlaceTile:
         pass
 
 
-    def do(self):
+    def do(self, beat_idx):
         self.elapsed_time = get_time() - self.start_time
         if self.elapsed_time < 0.1:
             self.dy += 0.03
@@ -190,7 +198,7 @@ class Move:
 
     def exit(self, event):
         pass
-    def do(self):
+    def do(self, beat_idx):
         self.bird.state_machine.handle_state_event(('IDLE', None))
 
     def draw(self):
@@ -203,26 +211,28 @@ class TileEvent:
         self.bird = bird
         self.start_time = get_time()
 
+        # 캐릭터의 회전 애니메이션을 위한 변수
         self.rotate = ['down','left','up','right']
         self.rotate_idx = 0
 
-        self.speed = 0
-        self.time_left = 0
-        self.type = None
-        self.tile_signal = None
+        self.speed = 0          # 캐릭터의 애니메이션 속도
+        self.time_left = 0      # 캐릭터가 움직일 남은 칸 수
+
+        # 방향타일에 의해 이동되다가 다른 방향타일 만나면 속도가 많이 빨라지는 문제 해결용 변수
+        self.tile_dup_check = False
 
     def enter(self, event):
         # event[1] = 밟은 타일의 타입, event[2] = 이동할 칸 수
-        self.type = event[1]
         self.time_left = self.speed = event[2]
         self.speed += 1
         self.time_left = self.speed
-        self.bird.look = tile_to_direction(self.type)
+        self.bird.look = tile_to_direction(event[1])
+
 
     def exit(self, event):
         pass
 
-    def do(self):
+    def do(self, beat_idx):
         # time_left가 다 소비되면 다시 움직일 수 있는 상태로 전환
         if self.time_left == 0: self.bird.state_machine.handle_state_event(('IDLE', None))
 
@@ -256,7 +266,7 @@ class Fall:
     def exit(self, event):
         pass
 
-    def do(self):
+    def do(self, beat_idx):
         if get_time() - self.start_time > 0.3:
             self.bird.img.update()
         self.bird.state_machine.handle_state_event(('IDLE',None))
@@ -271,6 +281,7 @@ class ShovelBird(Bird):
         self.tile_sound = Sample('sound/tileSound.mp3')
         self.time_elapsed = -1
         self.speed = 3
+        self.tile_speed = 2
 
         self.IDLE = Idle(self)
         self.MOVE = Move(self)
@@ -289,19 +300,10 @@ class ShovelBird(Bird):
         )
 
     def update(self, beat_idx):
+        self.state_machine.update(beat_idx)
+
         if self.target_pos != self.current_pos:
             self.current_pos = self.target_pos
-
-        # 이동 타일 밟는거 처리
-        if self.time_elapsed != beat_idx:
-            current_tile = self.field.get_tile(*self.get_pos())
-            if current_tile in (Tile.LEFT, Tile.RIGHT, Tile.UP_LEFT,
-                            Tile.UP_RIGHT, Tile.DOWN_LEFT, Tile.DOWN_RIGHT):
-                self.speed += 1
-                self.state_machine.handle_state_event(('TILE_EVENT', current_tile, self.speed))
-            self.time_elapsed = beat_idx
-
-        self.state_machine.update()
 
     # 입력한 키 처리
     def handle_key(self, key_state):
