@@ -17,23 +17,25 @@ class Idle:
         self.start_time = get_time()
         self.time_elapsed = 0
         self.one_beat = 120 / self.bird.bpm
+        self.last_beat_idx = -1
+
     def enter(self, event):
         pass
     def exit(self, event):
         pass
+
     def do(self, beat_idx):
-        self.time_elapsed = get_time() - self.start_time
-        if self.time_elapsed > self.one_beat/4:
+        if self.last_beat_idx != beat_idx:
             self.start_time = get_time()
             self.bird.img.update()
-        # 이동 타일 밟는거 처리
-        if self.time_elapsed != beat_idx:
             current_tile = self.bird.field.get_tile(*self.bird.get_pos())
             if current_tile in (Tile.LEFT, Tile.RIGHT, Tile.UP_LEFT,
                                 Tile.UP_RIGHT, Tile.DOWN_LEFT, Tile.DOWN_RIGHT):
                 self.bird.tile_speed += 1
                 self.bird.state_machine.handle_state_event(('TILE_EVENT', current_tile, self.bird.tile_speed))
-            self.time_elapsed = beat_idx
+
+            self.last_beat_idx = beat_idx
+
     def draw(self):
         self.bird.img.draw(*self.bird.current_pos)
 
