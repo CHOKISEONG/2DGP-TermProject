@@ -280,7 +280,6 @@ class Fall:
 class ShovelBird(Bird):
     def __init__(self, field):
         super().__init__('image/shovelBird.png', field)
-        self.tile_sound = Sample('Sound/sample/tileSound.mp3')
         self.time_elapsed = -1
         self.speed = 3
         self.tile_speed = 2
@@ -314,7 +313,6 @@ class ShovelBird(Bird):
 
         # 타일 놓기 처리
         if SDLK_j in key_state or SDLK_k in key_state:
-            self.tile_sound.play()
             self.state_machine.handle_state_event(('PLACE_TILE', key_state))
             return
 

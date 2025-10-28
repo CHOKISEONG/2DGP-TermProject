@@ -3,35 +3,29 @@ from Sound.bpm import Bpm
 import time
 
 class Music(Bpm):
-    def __init__(self, file_path, beat):
-        super().__init__(beat)
-        self.music = load_wav(file_path)
-        self.music.set_volume(50)
-        self._is_playing = False
+    def __init__(self, bpm):
+        super().__init__(bpm)
+        self.main_music = load_wav('Sound/music/120bpm_GerudoValley.wav')
+        self.direction_tile_sound = load_music('Sound/sample/put_tile.mp3')
+        self.main_music.set_volume(50)
+        self.direction_tile_sound.set_volume(50)
 
-    def play(self, repeat=False):
-        self.start_time = time.time()
+    def play(self, name = '',repeat=False):
+        sound = getattr(self, name, None)
+        if sound is None:
+            print(f"'{name}' 이 없음")
+            return
+
         if repeat:
-            self.music.repeat_play()
+            sound.repeat_play()
         else:
-            self.music.play()
-        self._is_playing = True
-
-    def stop(self):
-        self.music.stop()
-        self._is_playing = False
+            sound.play()
 
     def set_volume(self, volume):
-        self.music.set_volume(volume)
-
-    def is_playing(self):
-        return self._is_playing
+        self.main_music.set_volume(volume)
 
     def check_input_timing(self, window=0.15):
-        if not self._is_playing:
-            return "Not Playing", None
-
-        input_time = time.time()
+        input_time = get_time()
         result, diff = self.check_timing(input_time, window)
         return result, diff
 

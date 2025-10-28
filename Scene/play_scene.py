@@ -11,8 +11,8 @@ is_miss = False
 
 def init():
     global music, player1, bg, crowd, heart_ui
-    music = Music('Sound/music/120bpm_GerudoValley.wav', 120)
-    music.play(repeat=True)
+    music = Music(120)
+    music.play('main_music',repeat=True)
     bg = Map()
     heart_ui = UI_Heart()
     player1 = ShovelBird(bg)
@@ -49,6 +49,8 @@ def handle_events():
                 if event.key == SDLK_ESCAPE:
                     exit()
                 if event.type == SDL_KEYDOWN:
+                    if event.key  == SDLK_j or event.key == SDLK_k:
+                        music.play('direction_tile_sound')
                     key_state.add(event.key)
 
 def pause():
