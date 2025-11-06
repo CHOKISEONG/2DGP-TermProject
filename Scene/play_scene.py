@@ -2,7 +2,7 @@ from pico2d import *
 from Character.crowd import Crowd
 from Character.shovel_bird import ShovelBird
 from map.map import Map
-from Sound.musicManager import Music
+from Sound.musicManager import MusicManager, SfxManager
 from UI.UI_Heart import UI_Heart
 import game_world
 
@@ -10,9 +10,10 @@ key_state = set()
 is_miss = False
 
 def init():
-    global music, player1, bg, crowd, heart_ui
-    music = Music(120)
-    music.play('main_music',repeat=True)
+    global music, player1, bg, crowd, heart_ui, sfx
+    music = MusicManager(120)
+    sfx = SfxManager()
+    music.play(repeat=True)
     bg = Map()
     heart_ui = UI_Heart()
     player1 = ShovelBird(bg)
@@ -33,7 +34,7 @@ def draw():
     game_world.render()
 
 def handle_events():
-    global is_miss
+    global is_miss, sfx
     result, diff = music.check_input_timing()
 
     # 키 입력 처리
@@ -49,9 +50,11 @@ def handle_events():
                 if event.key == SDLK_ESCAPE:
                     exit()
                 if event.type == SDL_KEYDOWN:
-                    if event.key  == SDLK_j or event.key == SDLK_k:
-                        music.play('direction_tile_sound')
+                    if event.key == SDLK_j or event.key == SDLK_k:
+                        sfx.play('direction_tile_sound')
                     key_state.add(event.key)
+
+
 
 def pause():
     pass

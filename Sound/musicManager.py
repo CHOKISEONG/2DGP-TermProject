@@ -1,31 +1,39 @@
 from pico2d import *
 from Sound.bpm import Bpm
-import time
 
-class Music(Bpm):
+class MusicManager(Bpm):
     def __init__(self, bpm):
         super().__init__(bpm)
         self.main_music = load_wav('Sound/music/120bpm_GerudoValley.wav')
-        self.direction_tile_sound = load_music('Sound/sample/put_tile.mp3')
         self.main_music.set_volume(50)
-        self.direction_tile_sound.set_volume(50)
 
-    def play(self, name = '',repeat=False):
-        sound = getattr(self, name, None)
-        if sound is None:
-            print(f"'{name}' 이 없음")
-            return
-
+    def play(self, repeat=False):
         if repeat:
-            sound.repeat_play()
+            self.main_music.repeat_play()
         else:
-            sound.play()
-
-    def set_volume(self, volume):
-        self.main_music.set_volume(volume)
+            self.main_music.play()
 
     def check_input_timing(self, window=0.15):
         input_time = get_time()
         result, diff = self.check_timing(input_time, window)
         return result, diff
+
+class SfxManager:
+    def __init__(self):
+        self.sfx = {
+            'direction_tile' : load_music('Sound/sample/put_tile.mp3'),
+            'walk' : load_music('Sound/sample/walk.wav'),
+        }
+        for s in self.sfx.values():
+            s.set_volume(50)
+
+    def play(self, name):
+        if name not in self.sfx:
+            print(f'{name} 사운드가 없음')
+            return
+
+        self.sfx[name].play()
+
+
+
 
