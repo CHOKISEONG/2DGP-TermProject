@@ -15,12 +15,24 @@ def get_random_pos():
     y = y1 + (y2 - y1) * t
     return x, y
 
+def get_random_pos_title():
+    points = [(5, 20), (795, 20)]
+    edges = [ (points[0], points[1]) ]
+    edge = random.choice(edges)
+    (x1, y1), (x2, y2) = edge
+    t = random.random()
+    x = x1 + (x2 - x1) * t
+    y = y1 + (y2 - y1) * t
+    return x, y
+
 class Crowd:
     bird_names = ["budgie", "cockatiel", "duck", "parrot", "robin", "sparrow", "toucan"]
 
-    def __init__(self):
+    def __init__(self, str):
         self.images = {name: load_image(f"Character/image/{name.capitalize()}.png") for name in self.bird_names}
         self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
+        if str == 'title':
+            self.positions = {name: [get_random_pos_title() for _ in range(15)] for name in self.bird_names}
         self.w, self.h = 48, 48
         self.cx, self.cy = 400, 300  # 중앙 좌표
         self.last_beat_idx = -1
@@ -50,4 +62,22 @@ class Crowd:
                     rad, flip,
                     x, y,
                     self.w * self.size, self.h * self.size
+                )
+
+    def draw_title(self):
+        for i in range(15):
+            for name in self.bird_names:
+                img = self.images[name]
+                x, y = self.positions[name][i]
+
+                if x < 400:
+                    flip = 'h'
+                else:
+                    flip = 'none'
+
+                img.clip_composite_draw(
+                    0, 0, self.w, self.h,
+                    0, flip,
+                    x, y,
+                    120 * self.size, 120 * self.size
                 )
