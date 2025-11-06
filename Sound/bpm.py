@@ -19,9 +19,9 @@ class Bpm:
 
         diff = abs(input_time - beat_time)
 
-        if diff < window * 0.5:
+        if diff < window * 0.2:
             return "Perfect", diff
-        elif diff < window:
+        elif diff < window * 0.5:
             return "Good", diff
         else:
             return "Miss", diff
