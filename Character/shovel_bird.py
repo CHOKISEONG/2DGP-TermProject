@@ -1,7 +1,8 @@
+from pico2d import *
 from Character.bird import Bird
-from Sound.sample import *
 from state_machine import StateMachine
 from Global.myEnum import *
+
 
 idle = lambda e : e[0] == 'IDLE'
 move = lambda e : e[0] == 'MOVE'
@@ -20,13 +21,13 @@ class Idle:
         self.last_beat_idx = -1
 
     def enter(self, event):
-        pass
+        self.start_time = get_time()
+
     def exit(self, event):
         pass
 
     def do(self, beat_idx):
         if self.last_beat_idx != beat_idx:
-            self.start_time = get_time()
             self.bird.img.update()
             current_tile = self.bird.field.get_tile(*self.bird.get_pos())
             if current_tile in (Tile.LEFT, Tile.RIGHT, Tile.UP_LEFT,
@@ -308,6 +309,7 @@ class ShovelBird(Bird):
 
     # 입력한 키 처리
     def handle_key(self, key_state):
+        # 밟은 타일 이벤트 처리중 or 떨어지는 중에는 키 입력 무시하고 리턴
         if (self.state_machine.cur_state == self.TILE_EVENT
             or self.state_machine.cur_state == self.FALL): return
 
@@ -323,4 +325,4 @@ class ShovelBird(Bird):
 
     def draw(self):
         self.state_machine.draw()
-
+        draw_rectangle(*self.get_bb())
