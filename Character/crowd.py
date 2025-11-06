@@ -16,8 +16,11 @@ def get_random_pos():
     return x, y
 
 def get_random_pos_title():
-    points = [(5, 20), (795, 20)]
-    edges = [ (points[0], points[1]) ]
+    points = [(5, 60),(200, 30),(400, 20),(600, 30), (795, 60)]
+    edges = [ (points[0], points[1])
+              , (points[1], points[2])
+              ,(points[2], points[3])
+              ,(points[3], points[4])]
     edge = random.choice(edges)
     (x1, y1), (x2, y2) = edge
     t = random.random()
@@ -64,20 +67,24 @@ class Crowd:
                     self.w * self.size, self.h * self.size
                 )
 
-    def draw_title(self):
+    def draw_title(self, cx = 400, cy = 300):
         for i in range(15):
             for name in self.bird_names:
                 img = self.images[name]
                 x, y = self.positions[name][i]
 
+                dx = cx - x
+                dy = cy - y
+                rad = math.atan2(dy, dx) + math.pi
+
                 if x < 400:
-                    flip = 'h'
+                    flip = 'v'
                 else:
                     flip = 'none'
 
                 img.clip_composite_draw(
                     0, 0, self.w, self.h,
-                    0, flip,
+                    rad, flip,
                     x, y,
-                    120 * self.size, 120 * self.size
+                    140 * self.size, 140 * self.size
                 )
