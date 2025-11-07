@@ -1,6 +1,7 @@
 from pico2d import *
 import framework
 from Scene import play_scene
+from Scene import character_selection_scene
 from Character.crowd import Crowd
 
 image = None
@@ -8,8 +9,9 @@ image_white = None
 start_button = None
 sound = None
 crowd = None
-mouse_x = 0.0
-mouse_y = 0.0
+mouse_x = 400.0
+mouse_y = 300.0
+
 def init():
     global image, image_white, image_white_frame, sound, crowd, img_timer, df, start_button, font, button_ds
     image = load_image('map/image/title.png')
@@ -33,6 +35,7 @@ def finish():
     global image, image_white, image_white_frame, sound, crowd, img_timer, df, start_button, font, button_ds
     del image, image_white, image_white_frame, sound, crowd, img_timer, df, start_button, font, button_ds
 
+
 def handle_events():
     global mouse_x, mouse_y, button_ds
 
@@ -53,12 +56,9 @@ def handle_events():
             elif mouse_x > 500: mouse_x = 500
             if mouse_y < 200: mouse_y = 200
 
-
-
         elif event.type == SDL_MOUSEBUTTONDOWN and img_timer >= 6.0:
-            mouse_x, mouse_y = event.x, get_canvas_height() - event.y
             if 310 < mouse_x < 510 and 150 < mouse_y < 230:
-                framework.change_mode(play_scene)
+                framework.push_mode(character_selection_scene)
 
 
 def update():
@@ -89,7 +89,6 @@ def draw():
 
 
 
-
-
-def pause(): pass
+def pause():
+    print('hi')
 def resume(): pass
