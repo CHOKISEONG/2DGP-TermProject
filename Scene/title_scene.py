@@ -83,9 +83,9 @@ def handle_events():
         elif event.type == SDL_MOUSEMOTION:
             mouse_x, mouse_y = event.x, get_canvas_height() - event.y
             if 310 < mouse_x < 510 and 150 < mouse_y < 230:
-                button_ds = 1.1
+                title.button_ds = 1.1
             else:
-                button_ds = 1.0
+                title.button_ds = 1.0
 
             if mouse_x < 100: mouse_x = 100
             elif mouse_x > 500: mouse_x = 500
@@ -110,7 +110,7 @@ def draw():
 def pause():
     print('title_scene paused')
     title.is_paused = True
-    title_sound.set_volume(50)
+    title_sound.set_volume(20)
 
 def resume():
     print('title_scene resumed')
