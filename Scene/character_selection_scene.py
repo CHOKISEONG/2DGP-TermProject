@@ -2,10 +2,6 @@ from pico2d import *
 import framework
 import game_world
 from Character.bird import AnimationController
-from Character.shovel_bird import ShovelBird
-from Character.black_bird import BlackBird
-from Character.king_bird import KingBird
-from Character.hat_bird import HatBird
 from Scene import title_scene
 from Scene import play_scene
 
@@ -32,6 +28,8 @@ class characterSelectScene:
         self.delay_growth = 0.02
         self.max_delay = 0.9
 
+        self.size = [50,50]
+
     def update(self, beat_idx):
         if self.bird1_pos[1] < 350:
             self.bird1_pos[1] += 1
@@ -45,26 +43,34 @@ class characterSelectScene:
         if self.bird4_pos[1] < 350:
             self.bird4_pos[1] += 1
             self.bird4_pos[0] += 0.5
+            self.size[0] += 0.3
+            self.size[1] += 0.3
 
         self.time += 0.01
         if self.time < self.delay:
             return
 
-        self.rotate_idx = (self.rotate_idx + 1) % len(self.rotate)
-        new_direction = self.rotate[self.rotate_idx]
-        self.bird1.change_type(new_direction)
-        self.bird2.change_type(new_direction)
-        self.bird3.change_type(new_direction) # kingBird 스프라이트 고치기
-        self.bird4.change_type(new_direction)
+        if self.bird4_pos[1] < 350:
+            self.rotate_idx = (self.rotate_idx + 1) % len(self.rotate)
+            new_direction = self.rotate[self.rotate_idx]
+            self.bird1.change_type(new_direction)
+            self.bird2.change_type(new_direction)
+            self.bird3.change_type(new_direction) # kingBird 스프라이트 고치기
+            self.bird4.change_type(new_direction)
+        else:
+            self.bird1.change_type('down')
+            self.bird2.change_type('down')
+            self.bird3.change_type('down')
+            self.bird4.change_type('down')
 
         self.time = 0.0
         self.delay = min(self.max_delay, self.delay + self.delay_growth)
 
     def draw(self):
-        self.bird1.draw(*self.bird1_pos)
-        self.bird2.draw(*self.bird2_pos)
-        self.bird3.draw(*self.bird3_pos)
-        self.bird4.draw(*self.bird4_pos)
+        self.bird1.draw(*self.bird1_pos, *self.size)
+        self.bird2.draw(*self.bird2_pos, *self.size)
+        self.bird3.draw(*self.bird3_pos, *self.size)
+        self.bird4.draw(*self.bird4_pos, *self.size)
 
 def init():
     print('character_selection_scene init')

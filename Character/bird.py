@@ -27,8 +27,8 @@ class AnimationController:
             self.current_type = direction
             self.frame = 0
 
-    def draw(self, x, y):
-        self.img.clip_draw(*self.types[self.current_type][self.frame], x, y)
+    def draw(self, x, y, w=50, h=50):
+        self.img.clip_draw(*self.types[self.current_type][self.frame], x, y, w, h)
 
 class Bird:
     def __init__(self, img_path, field : Map):
