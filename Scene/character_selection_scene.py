@@ -1,3 +1,5 @@
+from encodings.punycode import selective_find
+
 from pico2d import *
 import framework
 import game_world
@@ -29,6 +31,17 @@ class characterSelectScene:
         self.max_delay = 0.9
 
         self.size = [50,50]
+        self.ds = [1.0,1.0,1.0,1.0]
+
+    # i가 0~3 까지 4개의 캐릭터가 마우스랑 겹치는지 확인해서 사이즈 증가
+    def isSelected(self, mouse_x, mouse_y, x, y, i):
+        half_w = self.size[0] * self.ds[i] / 3.0
+        half_h = self.size[1] * self.ds[i] / 3.0
+        bx, by = x, y
+        if (bx - half_w) <= mouse_x <= (bx + half_w) and (by - half_h) <= mouse_y <= (by + half_h):
+            self.ds[i] = 1.2
+        else:
+            self.ds[i] = 1.0
 
     def update(self, beat_idx):
         if self.bird1_pos[1] < 350:
@@ -67,10 +80,10 @@ class characterSelectScene:
         self.delay = min(self.max_delay, self.delay + self.delay_growth)
 
     def draw(self):
-        self.bird1.draw(*self.bird1_pos, *self.size)
-        self.bird2.draw(*self.bird2_pos, *self.size)
-        self.bird3.draw(*self.bird3_pos, *self.size)
-        self.bird4.draw(*self.bird4_pos, *self.size)
+        self.bird1.draw(*self.bird1_pos, self.size[0] * self.ds[0], self.size[1] * self.ds[0])
+        self.bird2.draw(*self.bird2_pos, self.size[0] * self.ds[1], self.size[1] * self.ds[1])
+        self.bird3.draw(*self.bird3_pos, self.size[0] * self.ds[2], self.size[1] * self.ds[2])
+        self.bird4.draw(*self.bird4_pos, self.size[0] * self.ds[3], self.size[1] * self.ds[3])
 
 def init():
     print('character_selection_scene init')
@@ -84,7 +97,23 @@ def finish():
 
 
 def handle_events():
-    pass
+    global character_select_scene
+    if character_select_scene.bird1_pos[1] < 350:
+        return
+
+    event_list = get_events()
+    for event in event_list:
+        if event.type == SDL_QUIT:
+            framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            framework.quit()
+        elif event.type == SDL_MOUSEMOTION:
+            mouse_x, mouse_y = event.x, get_canvas_height() - event.y
+            scene = character_select_scene
+            scene.isSelected(mouse_x, mouse_y, *scene.bird1_pos, 0)
+            scene.isSelected(mouse_x, mouse_y, *scene.bird2_pos, 1)
+            scene.isSelected(mouse_x, mouse_y, *scene.bird3_pos, 2)
+            scene.isSelected(mouse_x, mouse_y, *scene.bird4_pos, 3)
 
 
 def update():
