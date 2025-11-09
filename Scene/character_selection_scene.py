@@ -1,3 +1,5 @@
+from statistics import stdev
+
 from encodings.punycode import selective_find
 
 from pico2d import *
@@ -89,57 +91,93 @@ class characterSelectScene:
         self.bird3.draw(*self.bird3_pos, self.size[0] * self.ds[2], self.size[1] * self.ds[2])
         self.bird4.draw(*self.bird4_pos, self.size[0] * self.ds[3], self.size[1] * self.ds[3])
 
+    def finish(self):
+        del self.start_selected_music
+
 def init():
     print('character_selection_scene init')
-    global character_select_scene
+    global character_select_scene, select_sound, select_sound2
+    select_sound = load_wav('Sound/sample/select_sound.wav')
+    select_sound2 = load_wav('Sound/sample/select_sound2.wav')
     character_select_scene = characterSelectScene()
     game_world.add_object(character_select_scene)
 
 
 def finish():
+    character_select_scene.finish()
     pass
-
 
 def handle_events():
     global character_select_scene, player1_character, player2_character
     if character_select_scene.bird1_pos[1] < 350:
         return
+    # 둘 다 캐릭터 고르기 완료하면 마우스 입력 안 받게
+    if player1_character is not None and player2_character is not None:
+        framework.change_mode(play_scene)
+        return
 
     event_list = get_events()
     for event in event_list:
+        mouse_x, mouse_y = event.x, get_canvas_height() - event.y
+        scene = character_select_scene
         if event.type == SDL_QUIT:
             framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             framework.quit()
         elif event.type == SDL_MOUSEMOTION:
-            mouse_x, mouse_y = event.x, get_canvas_height() - event.y
-            scene = character_select_scene
             scene.isSelected(mouse_x, mouse_y, *scene.bird1_pos, 0)
             scene.isSelected(mouse_x, mouse_y, *scene.bird2_pos, 1)
             scene.isSelected(mouse_x, mouse_y, *scene.bird3_pos, 2)
             scene.isSelected(mouse_x, mouse_y, *scene.bird4_pos, 3)
         elif event.type == SDL_MOUSEBUTTONDOWN:
+            scene = character_select_scene
             if scene.isSelected(mouse_x, mouse_y, *scene.bird1_pos, 0):
-                player1_character = 'shovelBird'
+                if player1_character is None:
+                    player1_character = 'shovelBird'
+                    select_sound.play(1)
+                elif player1_character == 'shovelBird':
+                    return
+                else:
+                    player2_character = 'shovelBird'
+                    select_sound2.play(1)
             elif scene.isSelected(mouse_x, mouse_y, *scene.bird2_pos, 1):
-                player1_character = 'blackBird'
+                if player1_character is None:
+                    player1_character = 'blackBird'
+                    select_sound.play(1)
+                elif player1_character == 'blackBird':
+                    return
+                else:
+                    player2_character = 'blackBird'
+                    select_sound2.play(1)
             elif scene.isSelected(mouse_x, mouse_y, *scene.bird3_pos, 2):
-                player1_character = 'kingBird'
+                if player1_character is None:
+                    player1_character = 'kingBird'
+                    select_sound.play(1)
+                elif player1_character == 'kingBird':
+                    return
+                else:
+                    player2_character = 'kingBird'
+                    select_sound2.play(1)
             elif scene.isSelected(mouse_x, mouse_y, *scene.bird4_pos, 3):
-                player1_character = 'hatBird'
+                if player1_character is None:
+                    player1_character = 'hatBird'
+                    select_sound.play(1)
+                elif player1_character == 'hatBird':
+                    return
+                else:
+                    player2_character = 'hatBird'
+                    select_sound2.play(1)
 
 
 
 def update():
     game_world.update(0)
 
-
 def draw():
     clear_canvas()
     game_world.render()
+    print(f'ch1: {player1_character}, ch2: {player2_character}')
     update_canvas()
-
-
 
 def pause():
     print('hi')

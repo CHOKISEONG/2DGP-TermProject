@@ -32,7 +32,7 @@ class AnimationController:
 
 class Bird:
     def __init__(self, img_path, field : Map):
-        self.img = AnimationController('Character/image/shovelBird.png')
+        self.img = AnimationController(img_path)
         self.field: Map = field
         self.bpm = 120
         self.area = [

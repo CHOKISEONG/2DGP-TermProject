@@ -280,7 +280,11 @@ class Fall:
 
 class BlackBird(Bird):
     def __init__(self, field):
-        super().__init__('image/blackBird.png', field)
+        super().__init__('Character/image/blackBird.png', field)
+        self.pos = 126
+        self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
+        self.target_pos = list(self.current_pos)
+
         self.time_elapsed = -1
         self.speed = 3
         self.tile_speed = 2
