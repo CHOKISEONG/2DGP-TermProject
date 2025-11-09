@@ -281,7 +281,7 @@ class Fall:
 class BlackBird(Bird):
     def __init__(self, field):
         super().__init__('Character/image/blackBird.png', field)
-        self.pos = 126
+        self.pos = 208
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
 

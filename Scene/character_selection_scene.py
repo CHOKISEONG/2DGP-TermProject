@@ -109,9 +109,12 @@ def finish():
 
 def handle_events():
     global character_select_scene, player1_character, player2_character
+
+    # 캐릭터 이동 애니메이션 완료 후에 입력 받게 설정
     if character_select_scene.bird1_pos[1] < 350:
         return
-    # 둘 다 캐릭터 고르기 완료하면 마우스 입력 안 받게
+
+    # 둘 다 캐릭터 고르기 완료하면 플레이 씬으로 이동
     if player1_character is not None and player2_character is not None:
         framework.change_mode(play_scene)
         return

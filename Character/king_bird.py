@@ -281,9 +281,10 @@ class Fall:
 class KingBird(Bird):
     def __init__(self, field):
         super().__init__('Character/image/kingBird.png', field)
-        self.pos = 122
+        self.pos = 232
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
+        self.img.current_type = 'left'
 
         self.time_elapsed = -1
         self.speed = 3
