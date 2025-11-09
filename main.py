@@ -1,6 +1,6 @@
 from pico2d import *
 import framework
-from Scene import character_selection_scene as start_scene
+from Scene import title_scene as start_scene
 
 def main():
     open_canvas(800,600)

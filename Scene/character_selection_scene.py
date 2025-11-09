@@ -8,6 +8,8 @@ from Scene import title_scene
 from Scene import play_scene
 
 character_select_scene = None
+player1_character = None
+player2_character = None
 
 class characterSelectScene:
     def __init__(self):
@@ -40,8 +42,10 @@ class characterSelectScene:
         bx, by = x, y
         if (bx - half_w) <= mouse_x <= (bx + half_w) and (by - half_h) <= mouse_y <= (by + half_h):
             self.ds[i] = 1.2
+            return True
         else:
             self.ds[i] = 1.0
+            return False
 
     def update(self, beat_idx):
         if self.bird1_pos[1] < 350:
@@ -97,7 +101,7 @@ def finish():
 
 
 def handle_events():
-    global character_select_scene
+    global character_select_scene, player1_character, player2_character
     if character_select_scene.bird1_pos[1] < 350:
         return
 
@@ -114,6 +118,16 @@ def handle_events():
             scene.isSelected(mouse_x, mouse_y, *scene.bird2_pos, 1)
             scene.isSelected(mouse_x, mouse_y, *scene.bird3_pos, 2)
             scene.isSelected(mouse_x, mouse_y, *scene.bird4_pos, 3)
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            if scene.isSelected(mouse_x, mouse_y, *scene.bird1_pos, 0):
+                player1_character = 'shovelBird'
+            elif scene.isSelected(mouse_x, mouse_y, *scene.bird2_pos, 1):
+                player1_character = 'blackBird'
+            elif scene.isSelected(mouse_x, mouse_y, *scene.bird3_pos, 2):
+                player1_character = 'kingBird'
+            elif scene.isSelected(mouse_x, mouse_y, *scene.bird4_pos, 3):
+                player1_character = 'hatBird'
+
 
 
 def update():
