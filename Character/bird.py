@@ -6,7 +6,6 @@ move = lambda e : e[0] == 'MOVE'
 place_tile = lambda e : e[0] == 'PLACE_TILE'
 tile_event = lambda e : e[0] == 'TILE_EVENT'
 fall = lambda e : e[0] == 'FALL'
-resurrection = lambda e : e[0] == 'RESURRECTION'
 
 class AnimationController:
     def __init__(self, img_path):
@@ -294,15 +293,26 @@ class Fall:
 
     def enter(self, event):
         self.start_time = get_time()
+        print(event[1])
 
     def exit(self, event):
         pass
 
     def do(self, beat_idx):
-        pass
+        # 3초동안 떨어지는 애니메이션 재생
+        if get_time() - self.start_time < 3.0:
+            self.fall_animation()
+        else:
+            self.bird.state_machine.handle_state_event(('IDLE', None))
 
     def draw(self):
         self.bird.img.draw(*self.bird.current_pos)
+
+    def fall_animation(self):
+        # 이제 여기 해야됨
+        pass
+
+
 
 class Bird:
     def __init__(self, img_path, field : Map):
@@ -355,7 +365,7 @@ class Bird:
                     },
                 self.FALL:
                     {
-                        resurrection: self.IDLE
+                        idle: self.IDLE
                     }
             }
         )
@@ -400,7 +410,7 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.UP_LEFT))
 
     def move_up_right(self):
         self.img.change_type('up')
@@ -415,7 +425,7 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.UP_RIGHT))
 
     def move_down_left(self):
         self.img.change_type('down')
@@ -430,7 +440,7 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.DOWN_LEFT))
 
     def move_down_right(self):
         self.img.change_type('down')
@@ -445,7 +455,7 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.DOWN_RIGHT))
 
     def move_left(self):
         self.img.change_type('left')
@@ -457,7 +467,7 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.LEFT))
 
     def move_right(self):
         self.img.change_type('right')
@@ -469,4 +479,4 @@ class Bird:
             self.pos = new_pos
             self.target_pos = list(self.area[new_pos])
         else:
-            self.state_machine.handle_state_event(('FALL', None))
+            self.state_machine.handle_state_event(('FALL', DIRECTION.RIGHT))

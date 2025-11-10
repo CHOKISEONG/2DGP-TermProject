@@ -67,7 +67,6 @@ def update():
 
     if result == "Miss":
         if not process_miss and key_state:
-            print('입력 처리')
             player1.handle_key(key_state)
             key_state.clear()
         process_miss = True
@@ -88,7 +87,7 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 exit()
             if event.key == SDLK_j or event.key == SDLK_k:
-                sfx.play('direction_tile_sound')
+                sfx.play('direction_tile')
             key_state.add(event.key)
 
 def pause():
