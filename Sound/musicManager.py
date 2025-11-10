@@ -4,7 +4,7 @@ from Sound.bpm import Bpm
 class MusicManager(Bpm):
     def __init__(self, bpm):
         super().__init__(bpm)
-        self.main_music = load_music('Sound/music/120bpm_GerudoValley.mp3')
+        self.main_music = load_wav('Sound/music/120bpm_GerudoValley.wav')
         self.main_music.set_volume(50)
 
     def play(self, repeat=False):
