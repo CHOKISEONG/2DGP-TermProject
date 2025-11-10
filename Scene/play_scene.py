@@ -4,7 +4,6 @@ from Character.shovel_bird import ShovelBird
 from Character.black_bird import BlackBird
 from Character.king_bird import KingBird
 from Character.hat_bird import HatBird
-from Scene.character_selection_scene import player2_character
 from map.map import Map
 from Sound.musicManager import MusicManager, SfxManager
 from Scene import character_selection_scene
@@ -12,16 +11,15 @@ from UI.UI_Heart import UI_Heart
 import game_world
 
 key_state = set()
+process_miss = False
 is_miss = False
 
 player1 = None
 player2 = None
 
+
 def init():
     global music, player1, player2, bg, crowd, heart_ui, sfx
-    music = MusicManager(120)
-    sfx = SfxManager()
-    music.play(repeat=True)
 
     bg = Map()
     game_world.add_object(bg, 0)
@@ -54,35 +52,44 @@ def init():
     game_world.add_object(heart_ui, 2)
 
 
+    sfx = SfxManager()
+    music = MusicManager(120)
+    music.play(repeat=True)
+
+
 def finish():
     global music, player1, player2, bg, crowd, heart_ui, sfx
     del music, player1, bg, crowd, heart_ui
 
 def update():
+    global is_miss, process_miss, key_state
+    result, diff = music.check_input_timing()
+
+    if result == "Miss":
+        if not process_miss and key_state:
+            print('입력 처리')
+            player1.handle_key(key_state)
+            key_state.clear()
+        process_miss = True
+        is_miss = True
+    else:
+        process_miss = False
+        is_miss = False
+
     game_world.update(music.get_current_beat())
 
 def draw():
     game_world.render()
 
 def handle_events():
-    global is_miss, sfx
-    result, diff = music.check_input_timing()
-
+    global sfx, key_state
     for event in get_events():
-        if result == "Miss":
-            if not is_miss:
-                player1.handle_key(key_state)
-                key_state.clear()
-                is_miss = True
-        else:
-            is_miss = False
-            if result == "Good" or result == "Perfect":
-                    if event.key == SDLK_ESCAPE:
-                        exit()
-                    if event.type == SDL_KEYDOWN:
-                        if event.key == SDLK_j or event.key == SDLK_k:
-                            sfx.play('direction_tile_sound')
-                        key_state.add(event.key)
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_ESCAPE:
+                exit()
+            if event.key == SDLK_j or event.key == SDLK_k:
+                sfx.play('direction_tile_sound')
+            key_state.add(event.key)
 
 def pause():
     pass

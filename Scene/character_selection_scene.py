@@ -1,9 +1,8 @@
 from pico2d import *
 import framework
 import game_world
-from Character.bird import AnimationController
-from Scene import title_scene
 from Scene import play_scene
+from Character.bird import AnimationController
 
 player1_character = None
 player2_character = None
@@ -24,7 +23,8 @@ def is_selected(mouse_x, mouse_y, x, y, i):
 def init():
     print('character_selection_scene init')
     global start_selected_music, select_sound, select_sound2, select_font, bird1, bird1_pos, bird2, bird2_pos, bird3, bird3_pos, bird4, bird4_pos, choice_font, choice_font_pos, rotate, rotate_idx, delay, time, delay_growth, max_delay, size, ds
-    start_selected_music = load_wav('Sound/sample/character_select_start.wav')
+    start_selected_music = load_music('Sound/sample/character_select_start.mp3')
+    start_selected_music.set_volume(100)
     start_selected_music.play()
 
     bird1 = AnimationController('Character/image/shovelBird.png')
@@ -48,8 +48,8 @@ def init():
     delay_growth = 0.02
     max_delay = 0.9
 
-    select_sound = load_wav('Sound/sample/select_sound.wav')
-    select_sound2 = load_wav('Sound/sample/select_sound2.wav')
+    select_sound = load_music('Sound/sample/select_sound.mp3')
+    select_sound2 = load_music('Sound/sample/select_sound2.mp3')
 
 def handle_events():
     global player1_character, player2_character, select_font, choice_font_pos

@@ -61,15 +61,8 @@ def init():
     title = TitleImg()
     game_world.add_object(title)
 
-    title_sound = load_wav('Sound/music/titleMusic.wav')
+    title_sound = load_music('Sound/music/title_music.mp3')
     title_sound.repeat_play()
-
-
-def finish():
-    print('title_scene finished')
-    global image, image_white, image_white_frame, title_sound, crowd, img_timer, df, start_button, font, button_ds
-    del image, image_white, image_white_frame, title_sound, crowd, img_timer, df, start_button, font, button_ds
-
 
 def handle_events():
     global title, mouse_x, mouse_y, button_ds
@@ -105,13 +98,15 @@ def draw():
     game_world.render()
     update_canvas()
 
-
+def finish():
+    print('title_scene finished')
+    if title_sound:
+        title_sound.stop()
 
 def pause():
     print('title_scene paused')
     title.is_paused = True
-    title_sound.set_volume(20)
+    title_sound.set_volume(40)
 
 def resume():
     print('title_scene resumed')
-    title.is_paused = False

@@ -6,11 +6,8 @@ class Bpm:
         self.interval = 60.0 / bpm
         self.start_time = time.time()
 
-    def get_elapsed(self):
-        return time.time() - self.start_time
-
     def get_current_beat(self):
-        elapsed = self.get_elapsed()
+        elapsed = time.time() - self.start_time
         return int(elapsed / self.interval)
 
     def check_timing(self, input_time, window=0.15):
@@ -19,9 +16,9 @@ class Bpm:
 
         diff = abs(input_time - beat_time)
 
-        if diff < window * 0.3:
+        if diff < window * 0.1:
             return "Perfect", diff
-        elif diff < window * 0.6:
+        elif diff < window * 0.2:
             return "Good", diff
         else:
             return "Miss", diff
