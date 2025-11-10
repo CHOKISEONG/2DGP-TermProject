@@ -15,7 +15,6 @@ class ShovelBird(Bird):
 
     def update(self, beat_idx):
         self.state_machine.update(beat_idx)
-        print(self.state_machine.cur_state)
         if self.target_pos != self.current_pos:
             self.current_pos = self.target_pos
 

@@ -1,6 +1,7 @@
 from pico2d import *
 from Global.myEnum import *
 import math
+import random
 
 class Map:
     def __init__(self):
@@ -50,6 +51,14 @@ class Map:
 
     def change_tile(self, x, y, tile_type):
         self.map_types[x][y] = tile_type
+
+    def get_random_empty_tile(self):
+        rows = len(self.map_types)
+        cols = len(self.map_types[0]) if rows > 0 else 0
+        empties = [(y, x) for y in range(rows) for x in range(cols) if self.map_types[y][x] == Tile.EMPTY]
+        if not empties:
+            return None
+        return random.choice(empties)
 
     def update(self, beat_idx):
         pass

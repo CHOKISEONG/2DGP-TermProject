@@ -32,6 +32,9 @@ class KingBird(Bird):
             self.state_machine.handle_state_event(('PLACE_TILE', key_state))
             return
 
+        if SDLK_c in key_state:
+            pass
+
         # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
         if (SDLK_w in key_state or SDLK_a in key_state
             or SDLK_s in key_state or SDLK_d in key_state):
