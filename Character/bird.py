@@ -148,6 +148,9 @@ class TileEvent:
         pass
 
     def do(self, beat_idx):
+        # 속도가 너무 빨라지면 Fall 처리
+        if self.speed > 50:
+            self.bird.state_machine.handle_state_event(('FALL', None))
         # time_left가 다 소비되면 다시 움직일 수 있는 상태로 전환
         if self.time_left == 0: self.bird.state_machine.handle_state_event(('IDLE', None))
 
