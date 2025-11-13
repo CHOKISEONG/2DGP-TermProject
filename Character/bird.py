@@ -7,37 +7,6 @@ skill = lambda e : e[0] == 'SKILL'
 tile_event = lambda e : e[0] == 'TILE_EVENT'
 fall = lambda e : e[0] == 'FALL'
 
-class AnimationController:
-    def __init__(self, img_path):
-        self.img = load_image(img_path)         # 이미지
-        self.frame = 0                          # 현재 프레임
-        self.width, self.height = 60, 60        # 스프라이트의 가로,세로
-        self.types = {
-            'down': [(8, 240, self.width, self.height), (8, 160, self.width, self.height),
-                     (88, 240, self.width, self.height), (88, 160, self.width, self.height)],
-            'left': [(8, 0, self.width, self.height), (88, 0, self.width, self.height),
-                     (8, 0, self.width, self.height), (88, 0, self.width, self.height)],
-            'right': [(248, 240, self.width, self.height), (248, 160, self.width, self.height),
-                      (248, 80, self.width, self.height), (248, 0, self.width, self.height)],
-            'up': [(168, 240, self.width, self.height), (168, 160, self.width, self.height),
-                   (8, 80, self.width, self.height), (88, 80, self.width, self.height)],
-        }
-        self.current_type = 'right'
-        self.count = 0
-
-    def update(self):
-        self.count += 1
-        self.frame = self.count % len(self.types[self.current_type])
-
-    def change_type(self, direction):
-        if direction in self.types:
-            self.current_type = direction
-            self.frame = 0
-
-    def draw(self, x, y, w=50, h=50):
-        self.img.clip_draw(*self.types[self.current_type][self.frame], x, y, w, h)
-
-
 # 가만히 있을 때
 class Idle:
     def __init__(self, bird):
@@ -228,13 +197,44 @@ class Fall:
         self.bird.img.draw(*self.bird.current_pos, self.w, self.h )
 
     def fall_animation(self):
-        self.w -= 1
+        #self.w -= 1
         self.h -= 1
         pass
 
+# 스프라이트 이미지 관리용
+class AnimationController:
+    def __init__(self, img_path):
+        self.img = load_image(img_path)         # 이미지
+        self.frame = 0                          # 현재 프레임
+        self.width, self.height = 60, 60        # 스프라이트의 가로,세로
+        self.types = {
+            'down': [(8, 240, self.width, self.height), (8, 160, self.width, self.height),
+                     (88, 240, self.width, self.height), (88, 160, self.width, self.height)],
+            'left': [(8, 0, self.width, self.height), (88, 0, self.width, self.height),
+                     (8, 0, self.width, self.height), (88, 0, self.width, self.height)],
+            'right': [(248, 240, self.width, self.height), (248, 160, self.width, self.height),
+                      (248, 80, self.width, self.height), (248, 0, self.width, self.height)],
+            'up': [(168, 240, self.width, self.height), (168, 160, self.width, self.height),
+                   (8, 80, self.width, self.height), (88, 80, self.width, self.height)],
+        }
+        self.current_type = 'right'
+        self.count = 0
+
+    def update(self):
+        self.count += 1
+        self.frame = self.count % len(self.types[self.current_type])
+
+    def change_type(self, direction):
+        if direction in self.types:
+            self.current_type = direction
+            self.frame = 0
+
+    def draw(self, x, y, w=50, h=50):
+        self.img.clip_draw(*self.types[self.current_type][self.frame], x, y, w, h)
 
 class Bird:
-    def __init__(self, img_path, field : Map):
+    def __init__(self, img_path, field : Map, num):
+        self.player_num = num
         self.img = AnimationController(img_path)
         self.field: Map = field
         self.bpm = 120
@@ -247,6 +247,7 @@ class Bird:
         self.target_pos = list(self.current_pos)
         self.look = DIRECTION.NONE
         self.hp = 3
+        self.hp_img = load_image('UI/image/hp.png')
 
         self.move_speed = 0.05
         self.last_beat_idx = -1
@@ -294,7 +295,6 @@ class Bird:
     def handle_collision(self, group, other):
         if group == 'bird:explosion':
             self.hp -= 1
-            print(self.hp)
 
     def get_bb(self):
         return self.current_pos[0] - 5, self.current_pos[1] - 24, self.current_pos[0] + 12, self.current_pos[1] - 4

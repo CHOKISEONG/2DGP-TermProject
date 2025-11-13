@@ -4,8 +4,8 @@ from state_machine import StateMachine
 from Global.myEnum import *
 
 class BlackBird(Bird):
-    def __init__(self, field):
-        super().__init__('Character/image/blackBird.png', field)
+    def __init__(self, field, num):
+        super().__init__('Character/image/blackBird.png', field, num)
         self.pos = 208
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
@@ -21,12 +21,12 @@ class BlackBird(Bird):
             self.current_pos = self.target_pos
 
     # 입력한 키 처리
-    def handle_key(self, key_state, who):
+    def handle_key(self, key_state):
         # 밟은 타일 이벤트 처리중 or 떨어지는 중에는 키 입력 무시하고 리턴
         if (self.state_machine.cur_state == self.TILE_EVENT
             or self.state_machine.cur_state == self.FALL): return
 
-        if who == 'player1':
+        if self.player_num == 'player1':
             # 스킬1 - 폭발하는 새 발사
             if SDLK_f in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
@@ -44,7 +44,7 @@ class BlackBird(Bird):
                 or SDLK_s in key_state or SDLK_d in key_state):
                 self.state_machine.handle_state_event(('MOVE', key_state))
 
-        elif who == 'player2':
+        elif self.player_num == 'player2':
             # 스킬1
             if SDLK_PERIOD in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))

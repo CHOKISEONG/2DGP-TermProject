@@ -26,22 +26,22 @@ def init():
     game_world.add_object(bg, 0)
 
     if character_selection_scene.player1_character == 'shovelBird':
-        player1 = ShovelBird(bg)
+        player1 = ShovelBird(bg, 'player1')
     elif character_selection_scene.player1_character == 'blackBird':
-        player1 = BlackBird(bg)
+        player1 = BlackBird(bg, 'player1')
     elif character_selection_scene.player1_character == 'kingBird':
-        player1 = KingBird(bg)
+        player1 = KingBird(bg, 'player1')
     elif character_selection_scene.player1_character == 'hatBird':
-        player1 = HatBird(bg)
+        player1 = HatBird(bg, 'player1')
 
     if character_selection_scene.player2_character == 'shovelBird':
-        player2 = ShovelBird(bg)
+        player2 = ShovelBird(bg, 'player2')
     elif character_selection_scene.player2_character == 'blackBird':
-        player2 = BlackBird(bg)
+        player2 = BlackBird(bg, 'player2')
     elif character_selection_scene.player2_character == 'kingBird':
-        player2 = KingBird(bg)
+        player2 = KingBird(bg, 'player2')
     elif character_selection_scene.player2_character == 'hatBird':
-        player2 = HatBird(bg)
+        player2 = HatBird(bg, 'player2')
 
     game_world.add_object(player1, 1)
     game_world.add_object(player2, 1)
@@ -70,8 +70,8 @@ def update():
 
     if result == "Miss":
         if not process_miss:
-            player1.handle_key(key_state1, 'player1')
-            player2.handle_key(key_state2, 'player2')
+            player1.handle_key(key_state1)
+            player2.handle_key(key_state2)
             key_state1.clear()
             key_state2.clear()
         process_miss = True
