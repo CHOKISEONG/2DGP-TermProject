@@ -77,6 +77,8 @@ class Ghost:
         self.dir = 1
         self.flip = 'none'
         self.size = 30, 30
+        self.pos = [pos[0], pos[1]]
+        self.speed = 5.0
         self.time = get_time()
         if look == DIRECTION.UP_LEFT:
             self.base_dir = 30
@@ -98,8 +100,6 @@ class Ghost:
         else:
             self.base_dir = 90
             self.flip = 'h'
-        self.pos = [pos[0], pos[1]]
-        self.speed = 2.0
 
     def update(self, beat_idx):
         if get_time() - self.time > 5:
@@ -121,7 +121,7 @@ class Ghost:
             game_world.add_object(Explosion(self.pos))
             self.dir = 0
 
-        self.dir += 3
+        self.dir += 13
 
     def draw(self):
         self.img.clip_composite_draw(48,0,48,48,self.look, self.flip, *self.pos, *self.size)
@@ -130,8 +130,8 @@ class Explosion:
     def __init__(self, pos):
         self.img = load_image('UI/image/explosion.png')
         self.frame = 0
-        self.idx = 0
         self.x, self.y = pos[0], pos[1]
+        self.time = get_time()
         game_world.add_collision_pair('bird:explosion', None, self)
         from Scene.play_scene import sfx
         sfx.play('explosion')
@@ -143,9 +143,9 @@ class Explosion:
         return self.x - 15, self.y - 15, self.x + 15, self.y + 15
 
     def update(self, beat_idx):
-        if self.idx != beat_idx:
-            self.idx = beat_idx
-            self.frame += 2
+        if get_time() - self.time > 0.1:
+            self.frame += 1
+            self.time = get_time()
         if self.frame > 7:
             game_world.remove_object(self)
 
