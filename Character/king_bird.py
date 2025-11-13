@@ -1,10 +1,7 @@
-import random
-from pico2d import *
 import game_world
-from Character.bird import Bird
-from Sound.musicManager import SfxManager
-from state_machine import StateMachine
+from Character.bird import *
 from Global.myEnum import *
+
 
 class KingBird(Bird):
     def __init__(self, field):
@@ -31,10 +28,17 @@ class KingBird(Bird):
             or self.state_machine.cur_state == self.FALL): return
 
         if who == 'player1':
-            # 타일 놓기 처리
-            if SDLK_f in key_state or SDLK_g in key_state:
+            # 스킬1 - 폭발하는 새 발사
+            if SDLK_f in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
+                return
+
+            # 스킬2
+            elif SDLK_g in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -43,10 +47,17 @@ class KingBird(Bird):
                 self.state_machine.handle_state_event(('MOVE', key_state))
 
         elif who == 'player2':
-            # 타일 놓기 처리
-            if SDLK_PERIOD in key_state or SDLK_SLASH in key_state:
+            # 스킬1
+            if SDLK_PERIOD in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
+                return
+
+            # 스킬2
+            elif SDLK_SLASH in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -57,7 +68,6 @@ class KingBird(Bird):
     def draw(self):
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
-
 
 class Ghost:
     def __init__(self, look, pos):
@@ -116,7 +126,6 @@ class Ghost:
     def draw(self):
         self.img.clip_composite_draw(48,0,48,48,self.look, self.flip, *self.pos, *self.size)
 
-
 class Explosion:
     def __init__(self, pos):
         self.img = load_image('UI/image/explosion.png')
@@ -129,7 +138,6 @@ class Explosion:
 
     def handle_collision(self, group, other):
         game_world.remove_object(self)
-        pass
 
     def get_bb(self):
         return self.x - 15, self.y - 15, self.x + 15, self.y + 15
