@@ -2,13 +2,7 @@ from pico2d import *
 from Character.bird import *
 from Global.myEnum import *
 
-idle = lambda e : e[0] == 'IDLE'
-move = lambda e : e[0] == 'MOVE'
-place_tile = lambda e : e[0] == 'PLACE_TILE'
-tile_event = lambda e : e[0] == 'TILE_EVENT'
-fall = lambda e : e[0] == 'FALL'
-
-class PlaceTile:
+class Skill:
     def __init__(self, bird):
         self.bird = bird
         self.start_time = 0
@@ -120,10 +114,10 @@ class PlaceTile:
 
     def do(self, beat_idx):
         self.elapsed_time = get_time() - self.start_time
-        if self.elapsed_time < 0.1:
-            self.dy += 0.03
-        elif self.elapsed_time < 0.2:
-            self.dy -= 0.03
+        if self.elapsed_time < 0.2:
+            self.dy += 0.3
+        elif self.elapsed_time < 0.4:
+            self.dy -= 0.3
         else:
             self.bird.state_machine.handle_state_event(('IDLE', None))
 
@@ -134,12 +128,12 @@ class PlaceTile:
 class ShovelBird(Bird):
     def __init__(self, field):
         super().__init__('Character/image/shovelBird.png', field)
-        self.PLACE_TILE = PlaceTile(self)
+        self.SKILL = Skill(self)
         self.state_machine.rules = {
             self.IDLE:
                 {
                     tile_event: self.TILE_EVENT,
-                    place_tile: self.PLACE_TILE,
+                    skill: self.SKILL,
                     move: self.MOVE,
                     fall: self.FALL
                 },
@@ -149,10 +143,10 @@ class ShovelBird(Bird):
                     idle: self.IDLE,
                     tile_event: self.TILE_EVENT
                 },
-            self.PLACE_TILE:
+            self.SKILL:
                 {
                     idle: self.IDLE,
-                    place_tile: self.PLACE_TILE
+                    skill: self.SKILL
                 },
             self.TILE_EVENT:
                 {
@@ -186,13 +180,14 @@ class ShovelBird(Bird):
         if who == 'player1':
             # 스킬1 - 이동타일 놓기
             if SDLK_f in key_state:
-                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
                 make_direction_tile(y, x, key_state, self.field)
                 return
 
             # 스킬2 - 낭떠러지 타일 깔기
             elif SDLK_g in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
                 make_fall_tile(y, x, key_state, self.field)
                 return
@@ -205,13 +200,14 @@ class ShovelBird(Bird):
         elif who == 'player2':
             # 스킬1 - 이동타일 놓기
             if SDLK_PERIOD in key_state:
-                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
                 make_direction_tile(y, x, key_state, self.field)
                 return
 
             # 스킬2 - 낭떠러지 타일 깔기
             elif SDLK_SLASH in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
                 make_fall_tile(y, x, key_state, self.field)
                 return

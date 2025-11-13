@@ -3,7 +3,7 @@ from state_machine import StateMachine
 
 idle = lambda e : e[0] == 'IDLE'
 move = lambda e : e[0] == 'MOVE'
-place_tile = lambda e : e[0] == 'PLACE_TILE'
+skill = lambda e : e[0] == 'SKILL'
 tile_event = lambda e : e[0] == 'TILE_EVENT'
 fall = lambda e : e[0] == 'FALL'
 
