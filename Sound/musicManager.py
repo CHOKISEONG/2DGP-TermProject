@@ -23,6 +23,7 @@ class SfxManager:
         self.sfx = {
             'direction_tile' : load_music('Sound/sample/put_tile.mp3'),
             'walk' : load_music('Sound/sample/walk.mp3'),
+            'explosion' : load_music('Sound/sample/explosion.mp3')
         }
         for s in self.sfx.values():
             s.set_volume(50)

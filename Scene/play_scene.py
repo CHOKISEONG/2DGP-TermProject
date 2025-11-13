@@ -17,6 +17,7 @@ is_miss = False
 
 player1 = None
 player2 = None
+sfx = None
 
 def init():
     global music, player1, player2, bg, crowd, heart_ui, sfx
@@ -50,7 +51,6 @@ def init():
 
     heart_ui = UI_Heart()
     game_world.add_object(heart_ui, 2)
-
 
     sfx = SfxManager()
     music = MusicManager(120)

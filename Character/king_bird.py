@@ -2,6 +2,7 @@ import random
 from pico2d import *
 import game_world
 from Character.bird import Bird
+from Sound.musicManager import SfxManager
 from state_machine import StateMachine
 from Global.myEnum import *
 
@@ -44,7 +45,8 @@ class KingBird(Bird):
         elif who == 'player2':
             # 타일 놓기 처리
             if SDLK_PERIOD in key_state or SDLK_SLASH in key_state:
-                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+                ghost = Ghost(self.look, self.current_pos)
+                game_world.add_object(ghost, 2)
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -121,14 +123,20 @@ class Explosion:
         self.img = load_image('UI/image/explosion.png')
         self.frame = 0
         self.idx = 0
-        self.pos = [pos[0], pos[1]]
+        self.x, self.y = pos[0], pos[1]
+        from Scene.play_scene import sfx
+        sfx.play('explosion')
+
+    def get_bb(self):
+        return self.x - 15, self.y - 15, self.x + 15, self.y + 15
 
     def update(self, beat_idx):
         if self.idx != beat_idx:
             self.idx = beat_idx
-            self.frame += 1
+            self.frame += 2
         if self.frame > 7:
             game_world.remove_object(self)
 
     def draw(self):
-        self.img.clip_draw(self.frame * 32,0, 32, 32,*self.pos)
+        self.img.clip_draw(self.frame * 32,0, 32, 32,self.x, self.y)
+        draw_rectangle(*self.get_bb())
