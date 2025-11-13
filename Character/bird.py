@@ -331,6 +331,7 @@ class Bird:
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
         self.look = DIRECTION.NONE
+        self.hp = 3
 
         self.move_speed = 0.05
         self.last_beat_idx = -1
@@ -374,11 +375,10 @@ class Bird:
             }
         )
 
-    def handle_collide(self, name, pos):
-        if name == 'bomb':
-            distance = math.sqrt(math.pow(self.current_pos[0] - pos[0], 2) +math.pow(self.current_pos[1] - pos[1], 2))
-            if distance < 10:
-                print ('폭발')
+    def handle_collision(self, group, other):
+        if group == 'bird:explosion':
+            self.hp -= 1
+            print(self.hp)
 
     def get_bb(self):
         return self.current_pos[0] - 5, self.current_pos[1] - 24, self.current_pos[0] + 12, self.current_pos[1] - 4

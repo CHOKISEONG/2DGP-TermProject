@@ -59,7 +59,6 @@ class KingBird(Bird):
         draw_rectangle(*self.get_bb())
 
 
-
 class Ghost:
     def __init__(self, look, pos):
         self.img = load_image('Character/image/Robin.png')
@@ -68,6 +67,7 @@ class Ghost:
         self.dir = 1
         self.flip = 'none'
         self.size = 30, 30
+        self.time = get_time()
         if look == DIRECTION.UP_LEFT:
             self.base_dir = 30
             self.look = -120
@@ -92,6 +92,9 @@ class Ghost:
         self.speed = 2.0
 
     def update(self, beat_idx):
+        if get_time() - self.time > 5:
+            game_world.remove_object(self)
+
         base_angle = math.radians(self.base_dir)
         local_angle = math.radians(self.dir)
 
@@ -105,11 +108,7 @@ class Ghost:
             self.pos[0] += rotated_dx
             self.pos[1] += rotated_dy
         else:
-            from Scene.play_scene import player1, player2
-            bomb = Explosion(self.pos)
-            game_world.add_object(bomb, 2)
-            player1.handle_collide('bomb', self.pos)
-            player2.handle_collide('bomb', self.pos)
+            game_world.add_object(Explosion(self.pos))
             self.dir = 0
 
         self.dir += 3
@@ -124,8 +123,13 @@ class Explosion:
         self.frame = 0
         self.idx = 0
         self.x, self.y = pos[0], pos[1]
+        game_world.add_collision_pair('bird:explosion', None, self)
         from Scene.play_scene import sfx
         sfx.play('explosion')
+
+    def handle_collision(self, group, other):
+        game_world.remove_object(self)
+        pass
 
     def get_bb(self):
         return self.x - 15, self.y - 15, self.x + 15, self.y + 15

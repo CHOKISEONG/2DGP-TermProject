@@ -46,6 +46,9 @@ def init():
     game_world.add_object(player1, 1)
     game_world.add_object(player2, 1)
 
+    game_world.add_collision_pair('bird:explosion', player1, None)
+    game_world.add_collision_pair('bird:explosion', player2, None)
+
     crowd = Crowd('play_scene')
     game_world.add_object(crowd, 1)
 
@@ -76,6 +79,7 @@ def update():
         process_miss = False
 
     game_world.update(music.get_current_beat())
+    game_world.handle_collisions()
 
 def draw():
     game_world.render()
