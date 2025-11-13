@@ -56,8 +56,8 @@ def init():
     game_world.add_object(heart_ui, 2)
 
     sfx = SfxManager()
-    music = MusicManager(120)
-    music.play(repeat=True)
+    music = MusicManager(bpm=120)
+    music.play(repeat=True, sync=True, offset=-0.3)
 
 
 def finish():
