@@ -21,20 +21,32 @@ class BlackBird(Bird):
             self.current_pos = self.target_pos
 
     # 입력한 키 처리
-    def handle_key(self, key_state):
+    def handle_key(self, key_state, who):
         # 밟은 타일 이벤트 처리중 or 떨어지는 중에는 키 입력 무시하고 리턴
         if (self.state_machine.cur_state == self.TILE_EVENT
             or self.state_machine.cur_state == self.FALL): return
 
-        # 타일 놓기 처리
-        if SDLK_j in key_state or SDLK_k in key_state:
-            self.state_machine.handle_state_event(('PLACE_TILE', key_state))
-            return
+        if who == 'player1':
+            # 타일 놓기 처리
+            if SDLK_f in key_state or SDLK_g in key_state:
+                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+                return
 
-        # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
-        if (SDLK_w in key_state or SDLK_a in key_state
-            or SDLK_s in key_state or SDLK_d in key_state):
-            self.state_machine.handle_state_event(('MOVE', key_state))
+            # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
+            if (SDLK_w in key_state or SDLK_a in key_state
+                or SDLK_s in key_state or SDLK_d in key_state):
+                self.state_machine.handle_state_event(('MOVE', key_state))
+
+        elif who == 'player2':
+            # 타일 놓기 처리
+            if SDLK_PERIOD in key_state or SDLK_SLASH in key_state:
+                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+                return
+
+            # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
+            if (SDLK_LEFT in key_state or SDLK_RIGHT in key_state
+                    or SDLK_DOWN in key_state or SDLK_UP in key_state):
+                self.state_machine.handle_state_event(('MOVE', key_state))
 
     def draw(self):
         self.state_machine.draw()

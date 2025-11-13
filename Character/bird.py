@@ -327,7 +327,7 @@ class Bird:
             ((40 + x * 42.7 + 21) if y % 2 == 1 else (40 + x * 42.7), 95 + y * 28)
             for y in range(18) for x in range(17)
         ]
-        self.pos = 180
+        self.pos = 0
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
         self.look = DIRECTION.NONE
@@ -373,6 +373,12 @@ class Bird:
                     }
             }
         )
+
+    def handle_collide(self, name, pos):
+        if name == 'bomb':
+            distance = math.sqrt(math.pow(self.current_pos[0] - pos[0], 2) +math.pow(self.current_pos[1] - pos[1], 2))
+            if distance < 10:
+                print ('폭발')
 
     def get_bb(self):
         return self.current_pos[0] - 5, self.current_pos[1] - 24, self.current_pos[0] + 12, self.current_pos[1] - 4

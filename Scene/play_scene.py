@@ -10,13 +10,13 @@ from Scene import character_selection_scene
 from UI.UI_Heart import UI_Heart
 import game_world
 
-key_state = set()
+key_state1 = set()
+key_state2 = set()
 process_miss = False
 is_miss = False
 
 player1 = None
 player2 = None
-
 
 def init():
     global music, player1, player2, bg, crowd, heart_ui, sfx
@@ -58,37 +58,41 @@ def init():
 
 
 def finish():
-    global music, player1, player2, bg, crowd, heart_ui, sfx
-    del music, player1, bg, crowd, heart_ui
+    pass
 
 def update():
-    global is_miss, process_miss, key_state
+    global process_miss, key_state1, key_state2
+
     result, diff = music.check_input_timing()
 
     if result == "Miss":
-        if not process_miss and key_state:
-            player1.handle_key(key_state)
-            key_state.clear()
+        if not process_miss:
+            player1.handle_key(key_state1, 'player1')
+            player2.handle_key(key_state2, 'player2')
+            key_state1.clear()
+            key_state2.clear()
         process_miss = True
-        is_miss = True
     else:
         process_miss = False
-        is_miss = False
 
     game_world.update(music.get_current_beat())
 
 def draw():
     game_world.render()
 
+player1_key = [SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_f, SDLK_g]
+player2_key = [SDLK_LEFT, SDLK_UP, SDLK_DOWN, SDLK_RIGHT, SDLK_PERIOD, SDLK_SLASH]
 def handle_events():
-    global sfx, key_state
+    global sfx, key_state1, key_state2
     for event in get_events():
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
                 exit()
-            if event.key == SDLK_j or event.key == SDLK_k:
-                sfx.play('direction_tile')
-            key_state.add(event.key)
+            elif event.key in player1_key:
+                key_state1.add(event.key)
+            elif event.key in player2_key:
+                key_state2.add(event.key)
+
 
 def pause():
     pass
