@@ -39,7 +39,9 @@ class KingBird(Bird):
             # 스킬2
             elif SDLK_g in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
-                # 아직 미구현
+                # 이름 미정
+                skill2 = Skill2(self.look, self.current_pos)
+                game_world.add_object(skill2, 2)
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -58,7 +60,9 @@ class KingBird(Bird):
             # 스킬2
             elif SDLK_SLASH in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
-                # 아직 미구현
+                # 이름 미정
+                skill2 = Skill2(self.look, self.current_pos)
+                game_world.add_object(skill2, 2)
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -158,3 +162,57 @@ class Explosion:
     def draw(self):
         self.img.clip_draw(self.frame * 32,0, 32, 32,self.x, self.y)
         draw_rectangle(*self.get_bb())
+
+class Skill2:
+    def __init__(self, look, pos):
+        self.img = load_image('Character/image/Parrot.png')
+        self.pos = [pos[0], pos[1]]
+        self.size = 48, 48
+        self.look = 0
+        self.t = 0
+        self.length = 0
+        self.flip = 'none'
+        self.time = get_time()
+        if look == DIRECTION.UP_LEFT:
+            self.base_dir = 30
+            self.look = -120
+            self.flip = 'h'
+        elif look == DIRECTION.UP_RIGHT:
+            self.base_dir = -30
+            self.look = 120
+        elif look == DIRECTION.RIGHT:
+            self.base_dir = -90
+            self.look = 0
+        elif look == DIRECTION.DOWN_RIGHT:
+            self.base_dir = -150
+            self.look = -120
+        elif look == DIRECTION.DOWN_LEFT:
+            self.base_dir = -210
+            self.look = 120
+            self.flip = 'h'
+        else:
+            self.base_dir = 90
+            self.flip = 'h'
+
+    def get_bb(self):
+        return self.pos[0] - 7, self.pos[1] - 7, self.pos[0] + 7, self.pos[1] + 7
+
+    def update(self, beat_idx):
+        if self.t > 80:
+            game_world.remove_object(self)
+
+        self.look -= 0.0277
+        self.pos = self.get_skill2_line(*self.pos)
+
+    def draw(self):
+        self.img.clip_composite_draw(48, 0, 48, 48, self.look, self.flip, *self.pos, *self.size)
+        draw_rectangle(*self.get_bb())
+
+    def get_skill2_line(self, x, y):
+        a = 1.3
+        b = 1
+        x += (a - b) * math.cos(self.t) + b * math.cos(self.t * (a/b - 1)) * self.length
+        y += (a - b) * math.sin(self.t) - b * math.sin(self.t * (a / b - 1)) * self.length
+        self.t += 0.1
+        self.length += 0.01
+        return x, y
