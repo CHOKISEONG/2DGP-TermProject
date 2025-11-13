@@ -232,6 +232,21 @@ class AnimationController:
     def draw(self, x, y, w=50, h=50):
         self.img.clip_draw(*self.types[self.current_type][self.frame], x, y, w, h)
 
+class HP:
+    def __init__(self, num):
+        self.img = load_image('UI/image/hp.png')
+        self.hp = 57
+        self.player_num = num
+
+    def draw(self):
+        if self.player_num == 'player1':
+            pass
+        elif self.player_num == 'player2':
+            pass
+
+    def damaged(self, num):
+        self.hp -= num
+
 class Bird:
     def __init__(self, img_path, field : Map, num):
         self.player_num = num
@@ -246,8 +261,7 @@ class Bird:
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
         self.look = DIRECTION.NONE
-        self.hp = 3
-        self.hp_img = load_image('UI/image/hp.png')
+        self.hp = HP(self.player_num)
 
         self.move_speed = 0.05
         self.last_beat_idx = -1
@@ -294,7 +308,7 @@ class Bird:
 
     def handle_collision(self, group, other):
         if group == 'bird:explosion':
-            self.hp -= 1
+            self.hp.damaged(5)
 
     def get_bb(self):
         return self.current_pos[0] - 5, self.current_pos[1] - 24, self.current_pos[0] + 12, self.current_pos[1] - 4
