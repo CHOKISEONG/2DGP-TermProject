@@ -54,6 +54,14 @@ def init():
 def handle_events():
     global player1_character, player2_character, select_font, choice_font_pos
 
+    # 개발 진행을 원활히 하기 위해 만든 스페이스바로 캐릭터 선택구간 스킵용
+    event_list = get_events()
+    for event in event_list:
+        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            player1_character = 'shovelBird'
+            player2_character = 'kingBird'
+            framework.change_mode(play_scene)
+
     # 캐릭터 이동 애니메이션 완료 후에 입력 받게 설정
     if bird1_pos[1] < 350:
         return
