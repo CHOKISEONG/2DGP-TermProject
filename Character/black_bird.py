@@ -6,6 +6,7 @@ from Global.myEnum import *
 class BlackBird(Bird):
     def __init__(self, field, num):
         super().__init__('Character/image/blackBird.png', field, num)
+        self.face_ui = load_image('Character/image/blackBird.png')
         self.pos = 208
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
@@ -65,4 +66,8 @@ class BlackBird(Bird):
     def draw(self):
         self.state_machine.draw()
         self.hp.draw()
+        if self.player_num == 'player1':
+            self.face_ui.clip_draw(32,263,15,15,50,650,100,100)
+        else:
+            self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
         draw_rectangle(*self.get_bb())

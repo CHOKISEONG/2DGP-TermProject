@@ -5,6 +5,7 @@ from Global.myEnum import *
 class ShovelBird(Bird):
     def __init__(self, field, num):
         super().__init__('Character/image/shovelBird.png', field, num)
+        self.face_ui = load_image('Character/image/shovelBird.png')
         self.pos = 72
         self.current_pos = [self.area[self.pos][0], self.area[self.pos][1]]
         self.target_pos = list(self.current_pos)
@@ -66,6 +67,10 @@ class ShovelBird(Bird):
     def draw(self):
         self.state_machine.draw()
         self.hp.draw()
+        if self.player_num == 'player1':
+            self.face_ui.clip_draw(32,263,15,15,50,650,100,100)
+        else:
+            self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
         draw_rectangle(*self.get_bb())
 
 def make_direction_tile(y, x, key_state, field):
