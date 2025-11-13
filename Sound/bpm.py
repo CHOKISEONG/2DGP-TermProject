@@ -1,4 +1,4 @@
-from pico2d import get_time
+from pico2d import *
 
 class Bpm:
     def __init__(self, bpm, start_time=None):

@@ -8,6 +8,7 @@ from map.map import Map
 from Sound.musicManager import MusicManager, SfxManager
 from Scene import character_selection_scene
 from UI.UI_Heart import UI_Heart
+from UI.UI_Bpm import UI_Bpm
 import game_world
 
 key_state1 = set()
@@ -20,7 +21,7 @@ player2 = None
 sfx = None
 
 def init():
-    global music, player1, player2, bg, crowd, heart_ui, sfx
+    global music, player1, player2, bg, crowd, heart_ui, sfx, bpm_ui
 
     bg = Map()
     game_world.add_object(bg, 0)
@@ -54,6 +55,8 @@ def init():
 
     heart_ui = UI_Heart()
     game_world.add_object(heart_ui, 2)
+    bpm_ui = UI_Bpm()
+    game_world.add_object(bpm_ui, 2)
 
     sfx = SfxManager()
     music = MusicManager(bpm=120)
