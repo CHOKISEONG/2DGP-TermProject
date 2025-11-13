@@ -64,4 +64,5 @@ class BlackBird(Bird):
 
     def draw(self):
         self.state_machine.draw()
+        self.hp.draw()
         draw_rectangle(*self.get_bb())

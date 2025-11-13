@@ -235,14 +235,16 @@ class AnimationController:
 class HP:
     def __init__(self, num):
         self.img = load_image('UI/image/hp.png')
-        self.hp = 57
+        self.hp = 9
         self.player_num = num
 
     def draw(self):
         if self.player_num == 'player1':
-            pass
+            for i in range(0, self.hp):
+                self.img.clip_draw(16,33,16,15,150 + i * 16,660, 100,100)
         elif self.player_num == 'player2':
-            pass
+            for i in range(0, self.hp):
+                self.img.clip_draw(16, 33, 16, 15, 650 - i * 16, 660, 100, 100)
 
     def damaged(self, num):
         self.hp -= num
@@ -308,7 +310,7 @@ class Bird:
 
     def handle_collision(self, group, other):
         if group == 'bird:explosion':
-            self.hp.damaged(5)
+            self.hp.damaged(1)
 
     def get_bb(self):
         return self.current_pos[0] - 5, self.current_pos[1] - 24, self.current_pos[0] + 12, self.current_pos[1] - 4

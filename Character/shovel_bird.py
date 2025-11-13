@@ -65,6 +65,7 @@ class ShovelBird(Bird):
 
     def draw(self):
         self.state_machine.draw()
+        self.hp.draw()
         draw_rectangle(*self.get_bb())
 
 def make_direction_tile(y, x, key_state, field):
