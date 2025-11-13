@@ -27,9 +27,16 @@ class BlackBird(Bird):
             or self.state_machine.cur_state == self.FALL): return
 
         if who == 'player1':
-            # 타일 놓기 처리
-            if SDLK_f in key_state or SDLK_g in key_state:
-                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+            # 스킬1 - 폭발하는 새 발사
+            if SDLK_f in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
+                return
+
+            # 스킬2
+            elif SDLK_g in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -38,9 +45,16 @@ class BlackBird(Bird):
                 self.state_machine.handle_state_event(('MOVE', key_state))
 
         elif who == 'player2':
-            # 타일 놓기 처리
-            if SDLK_PERIOD in key_state or SDLK_SLASH in key_state:
-                self.state_machine.handle_state_event(('PLACE_TILE', key_state))
+            # 스킬1
+            if SDLK_PERIOD in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
+                return
+
+            # 스킬2
+            elif SDLK_SLASH in key_state:
+                self.state_machine.handle_state_event(('SKILL', key_state))
+                # 아직 미구현
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
