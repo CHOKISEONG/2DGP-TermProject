@@ -15,12 +15,23 @@ class KingBird(Bird):
         self.time_elapsed = -1
         self.speed = 3
         self.tile_speed = 2
+        self.skill1_cooldown = 3
+        self.skill2_cooldown = 5
+        self.beat_idx = -1
 
     def update(self, beat_idx):
         self.state_machine.update(beat_idx)
 
         if self.target_pos != self.current_pos:
             self.current_pos = self.target_pos
+
+        # 스킬 쿨타임 회복용 코드
+        if self.beat_idx < beat_idx:
+            self.beat_idx = beat_idx
+            if self.skill1_cooldown < 3:
+                self.skill1_cooldown += 1
+            if self.skill2_cooldown < 5:
+                self.skill2_cooldown += 1
 
     # 입력한 키 처리
     def handle_key(self, key_state):
@@ -30,18 +41,20 @@ class KingBird(Bird):
 
         if self.player_num == 'player1':
             # 스킬1 - 폭발하는 새 발사
-            if SDLK_f in key_state:
+            if SDLK_f in key_state and self.skill1_cooldown >= 3:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
+                self.skill1_cooldown = 0
                 return
 
             # 스킬2
-            elif SDLK_g in key_state:
+            elif SDLK_g in key_state and self.skill2_cooldown >= 5:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 # 이름 미정
                 skill2 = Skill2(self.look, self.current_pos)
                 game_world.add_object(skill2, 2)
+                self.skill2_cooldown = 0
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -51,18 +64,20 @@ class KingBird(Bird):
 
         elif self.player_num == 'player2':
             # 스킬1
-            if SDLK_PERIOD in key_state:
+            if SDLK_PERIOD in key_state and self.skill1_cooldown >= 3:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
+                self.skill1_cooldown = 0
                 return
 
             # 스킬2
-            elif SDLK_SLASH in key_state:
+            elif SDLK_SLASH in key_state and self.skill2_cooldown >= 5:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 # 이름 미정
                 skill2 = Skill2(self.look, self.current_pos)
                 game_world.add_object(skill2, 2)
+                self.skill2_cooldown = 0
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -167,35 +182,45 @@ class Skill2:
     def __init__(self, look, pos):
         self.img = load_image('Character/image/Parrot.png')
         self.pos = [pos[0], pos[1]]
-        self.size = 48, 48
+        self.size = 45, 45
         self.look = 0
-        self.t = 0
-        self.length = 0
+        self.t = 1
+        self.length = 1
         self.flip = 'none'
         self.time = get_time()
+        game_world.add_collision_pair('bird:explosion', None, self)
         if look == DIRECTION.UP_LEFT:
             self.base_dir = 30
             self.look = -120
             self.flip = 'h'
+            self.pos[0] -= 60
         elif look == DIRECTION.UP_RIGHT:
             self.base_dir = -30
             self.look = 120
+            self.pos[0] += 60
         elif look == DIRECTION.RIGHT:
             self.base_dir = -90
             self.look = 0
+            self.pos[0] += 60
         elif look == DIRECTION.DOWN_RIGHT:
             self.base_dir = -150
             self.look = -120
+            self.pos[0] += 60
         elif look == DIRECTION.DOWN_LEFT:
             self.base_dir = -210
             self.look = 120
             self.flip = 'h'
+            self.pos[0] -= 60
         else:
             self.base_dir = 90
             self.flip = 'h'
+            self.pos[0] -= 60
 
     def get_bb(self):
         return self.pos[0] - 7, self.pos[1] - 7, self.pos[0] + 7, self.pos[1] + 7
+
+    def handle_collision(self, group, other):
+        game_world.remove_object(self)
 
     def update(self, beat_idx):
         if self.t > 80:
@@ -214,5 +239,5 @@ class Skill2:
         x += (a - b) * math.cos(self.t) + b * math.cos(self.t * (a/b - 1)) * self.length
         y += (a - b) * math.sin(self.t) - b * math.sin(self.t * (a / b - 1)) * self.length
         self.t += 0.1
-        self.length += 0.01
+        self.length += 0.005
         return x, y

@@ -33,9 +33,10 @@ class Crowd:
 
     def __init__(self, str):
         self.images = {name: load_image(f"Character/image/{name.capitalize()}.png") for name in self.bird_names}
-        self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
         if str == 'title':
             self.positions = {name: [get_random_pos_title() for _ in range(15)] for name in self.bird_names}
+        else:
+            self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
         self.w, self.h = 48, 48
         self.cx, self.cy = 400, 300  # 중앙 좌표
         self.last_beat_idx = -1
