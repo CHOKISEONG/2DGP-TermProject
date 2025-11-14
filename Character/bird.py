@@ -181,6 +181,9 @@ class Fall:
         self.w, self.h = 50, 50
 
     def enter(self, event):
+        from Scene.play_scene import sfx
+        sfx.play('fall')
+        self.bird.hp.hp -= 3
         self.start_time = get_time()
         self.dir = event[1]
         self.w, self.h = 50, 50

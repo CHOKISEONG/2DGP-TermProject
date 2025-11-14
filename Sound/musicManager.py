@@ -26,10 +26,13 @@ class SfxManager:
         self.sfx = {
             'direction_tile' : load_music('Sound/sample/put_tile.mp3'),
             'walk' : load_music('Sound/sample/walk.mp3'),
-            'explosion' : load_music('Sound/sample/explosion.mp3')
+            'explosion' : load_music('Sound/sample/explosion.mp3'),
+            'fall' : load_wav('Sound/sample/fall.wav')
         }
-        for s in self.sfx.values():
-            s.set_volume(20)
+        self.sfx['direction_tile'].set_volume(30)
+        self.sfx['walk'].set_volume(20)
+        self.sfx['explosion'].set_volume(20)
+        self.sfx['fall'].set_volume(50)
 
     def play(self, name):
         if name not in self.sfx:
