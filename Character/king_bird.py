@@ -35,7 +35,7 @@ class KingBird(Bird):
             self.beat_idx = beat_idx
             if self.skill1_cur_cooldown < self.skill1_max_cooldown:
                 self.skill1_cur_cooldown += 1
-            if self.skill2_cooldown < self.skill2_max_cooldown:
+            if self.skill2_cur_cooldown < self.skill2_max_cooldown:
                 self.skill2_cur_cooldown += 1
 
     # 입력한 키 처리
@@ -222,7 +222,7 @@ class Skill2:
             self.pos[0] -= 60
 
     def get_bb(self):
-        return self.pos[0] - 7, self.pos[1] - 7, self.pos[0] + 7, self.pos[1] + 7
+        return self.pos[0] - 3, self.pos[1] - 3, self.pos[0] + 3, self.pos[1] + 3
 
     def handle_collision(self, group, other):
         game_world.remove_object(self)
@@ -231,7 +231,7 @@ class Skill2:
         if self.t > 80:
             game_world.remove_object(self)
 
-        self.look -= 0.0277
+        self.look -= 0.04
         self.pos = self.get_skill2_line(*self.pos)
 
     def draw(self):
