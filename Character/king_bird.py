@@ -15,8 +15,13 @@ class KingBird(Bird):
         self.time_elapsed = -1
         self.speed = 3
         self.tile_speed = 2
-        self.skill1_cooldown = 3
-        self.skill2_cooldown = 5
+
+        self.skill1_img = load_image('Character/image/Robin.png')
+        self.skill1_cur_cooldown = 4
+        self.skill1_max_cooldown = 4
+        self.skill2_img = load_image('Character/image/Toucan.png')
+        self.skill2_cur_cooldown = 6
+        self.skill2_max_cooldown = 6
         self.beat_idx = -1
 
     def update(self, beat_idx):
@@ -28,10 +33,10 @@ class KingBird(Bird):
         # 스킬 쿨타임 회복용 코드
         if self.beat_idx < beat_idx:
             self.beat_idx = beat_idx
-            if self.skill1_cooldown < 3:
-                self.skill1_cooldown += 1
-            if self.skill2_cooldown < 5:
-                self.skill2_cooldown += 1
+            if self.skill1_cur_cooldown < self.skill1_max_cooldown:
+                self.skill1_cur_cooldown += 1
+            if self.skill2_cooldown < self.skill2_max_cooldown:
+                self.skill2_cur_cooldown += 1
 
     # 입력한 키 처리
     def handle_key(self, key_state):
@@ -41,20 +46,20 @@ class KingBird(Bird):
 
         if self.player_num == 'player1':
             # 스킬1 - 폭발하는 새 발사
-            if SDLK_f in key_state and self.skill1_cooldown >= 3:
+            if SDLK_f in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
-                self.skill1_cooldown = 0
+                self.skill1_cur_cooldown = 0
                 return
 
             # 스킬2
-            elif SDLK_g in key_state and self.skill2_cooldown >= 5:
+            elif SDLK_g in key_state and self.skill2_cur_cooldown >= self.skill2_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 # 이름 미정
                 skill2 = Skill2(self.look, self.current_pos)
                 game_world.add_object(skill2, 2)
-                self.skill2_cooldown = 0
+                self.skill2_cur_cooldown = 0
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -64,20 +69,20 @@ class KingBird(Bird):
 
         elif self.player_num == 'player2':
             # 스킬1
-            if SDLK_PERIOD in key_state and self.skill1_cooldown >= 3:
+            if SDLK_PERIOD in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 ghost = Ghost(self.look, self.current_pos)
                 game_world.add_object(ghost, 2)
-                self.skill1_cooldown = 0
+                self.skill1_cur_cooldown = 0
                 return
 
             # 스킬2
-            elif SDLK_SLASH in key_state and self.skill2_cooldown >= 5:
+            elif SDLK_SLASH in key_state and self.skill2_cur_cooldown >= self.skill2_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 # 이름 미정
                 skill2 = Skill2(self.look, self.current_pos)
                 game_world.add_object(skill2, 2)
-                self.skill2_cooldown = 0
+                self.skill2_cur_cooldown = 0
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
