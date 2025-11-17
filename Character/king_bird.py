@@ -16,10 +16,11 @@ class KingBird(Bird):
         self.speed = 3
         self.tile_speed = 2
 
+        self.skill_font = load_font('ENCR10B.TTF', 50)
         self.skill1_img = load_image('Character/image/Robin.png')
         self.skill1_cur_cooldown = 4
         self.skill1_max_cooldown = 4
-        self.skill2_img = load_image('Character/image/Toucan.png')
+        self.skill2_img = load_image('Character/image/Parrot.png')
         self.skill2_cur_cooldown = 6
         self.skill2_max_cooldown = 6
         self.beat_idx = -1
@@ -45,7 +46,6 @@ class KingBird(Bird):
             or self.state_machine.cur_state == self.FALL): return
 
         if self.player_num == 'player1':
-            print('킹버드 플레이어1')
             # 스킬1 - 폭발하는 새 발사
             if SDLK_f in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
@@ -96,8 +96,24 @@ class KingBird(Bird):
         self.hp.draw()
         if self.player_num == 'player1':
             self.face_ui.clip_draw(32,263,15,15,50,650,100,100)
+            if self.skill1_cur_cooldown == self.skill1_max_cooldown:
+                self.skill1_img.clip_composite_draw(48,0,48,48, 0, 'not flip', 80, 20, 150, 100)
+            else:
+                self.skill_font.draw(60, 20, str(self.skill1_max_cooldown - self.skill1_cur_cooldown), (255,255,255))
+            if self.skill2_cur_cooldown == self.skill2_max_cooldown:
+                self.skill2_img.clip_composite_draw(48,0,48,48, 0, 'not flip', 130, 20, 100, 100)
+            else:
+                self.skill_font.draw(130, 20, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255,255,255))
         else:
             self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
+            if self.skill1_cur_cooldown == self.skill1_max_cooldown:
+                self.skill1_img.clip_composite_draw(48,0,48,48, 0, 'h', 650, 20, 130, 130)
+            else:
+                self.skill_font.draw(630, 20, str(self.skill1_max_cooldown - self.skill1_cur_cooldown), (255,255,255))
+            if self.skill2_cur_cooldown == self.skill2_max_cooldown:
+                self.skill2_img.clip_composite_draw(48,0,48,48, 0, 'h', 700, 20, 90, 90)
+            else:
+                self.skill_font.draw(700, 20, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255,255,255))
         draw_rectangle(*self.get_bb())
 
 class Ghost:

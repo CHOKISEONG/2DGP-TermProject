@@ -13,6 +13,9 @@ class ShovelBird(Bird):
         self.speed = 3
         self.tile_speed = 2
 
+        self.skill1_img = load_image('UI/image/PS4_swipes.png')
+        self.skill2_img = load_image('UI/image/fall_tile.png')
+
     def update(self, beat_idx):
         self.state_machine.update(beat_idx)
         if self.target_pos != self.current_pos:
@@ -70,8 +73,12 @@ class ShovelBird(Bird):
         self.hp.draw()
         if self.player_num == 'player1':
             self.face_ui.clip_draw(32,263,15,15,50,650,100,100)
+            self.skill1_img.clip_draw(0, 0, 24, 16, 50, 30, 100, 100)
+            self.skill2_img.clip_draw(0, 0, 108, 108, 130, 30, 100, 100)
         else:
             self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
+            self.skill1_img.clip_draw(0, 0, 24, 16, 620, 30, 100, 100)
+            self.skill2_img.clip_draw(0, 0, 108, 108, 720, 30, 90, 90)
         draw_rectangle(*self.get_bb())
 
 def make_direction_tile(y, x, key_state, field):
