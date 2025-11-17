@@ -6,7 +6,7 @@ class MusicManager(Bpm):
 
     def __init__(self, bpm):
         super().__init__(bpm)
-        self.main_music = load_wav('Sound/music/120bpm_GerudoValley.wav')
+        self.main_music = load_wav('Sound/music/120bpm_mainScene.wav')
         self.main_music.set_volume(50)
 
     def play(self, repeat=False, sync=True, offset=0.0):
@@ -36,6 +36,7 @@ class SfxManager:
         self.sfx['walk'].set_volume(20)
         self.sfx['explosion'].set_volume(20)
         self.sfx['fall'].set_volume(80)
+        self.sfx['win'].set_volume(60)
 
     def play(self, name):
         if name not in self.sfx:
