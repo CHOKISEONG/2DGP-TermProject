@@ -22,7 +22,7 @@ class BlackBird(Bird):
         self.skill1_img = load_image('UI/image/black_skill1.png')
         self.skill1_cur_cooldown = 2
         self.skill1_max_cooldown = 2
-        self.skill2_img = load_image('UI/image/black_skill1.png')
+        self.skill2_img = load_image('UI/image/speed_up.png')
         self.skill2_cur_cooldown = 6
         self.skill2_max_cooldown = 6
         self.beat_idx = -1
@@ -103,17 +103,19 @@ class BlackBird(Bird):
             else:
                 self.skill_font.draw(60, 20, str(self.skill1_max_cooldown - self.skill1_cur_cooldown), (255,255,255))
             if self.skill2_cur_cooldown == self.skill2_max_cooldown:
-                self.skill2_img.clip_draw(0, 0, 32, 32, 130, 30, 100, 100)
+                self.skill1_img.clip_draw(0, 0, 32, 32, 150, 30, 100, 100)
+                self.skill2_img.clip_draw(0, 0, 32, 32, 150, 30, 60, 60)
             else:
                 self.skill_font.draw(130, 20, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255,255,255))
         else:
             self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
             if self.skill1_cur_cooldown == self.skill1_max_cooldown:
-                self.skill1_img.clip_draw(0, 0, 32, 32, 650, 20, 100, 100)
+                self.skill1_img.clip_draw(0, 0, 32, 32, 650, 30, 100, 100)
             else:
                 self.skill_font.draw(630, 20, str(self.skill1_max_cooldown - self.skill1_cur_cooldown), (255,255,255))
             if self.skill2_cur_cooldown == self.skill2_max_cooldown:
-                self.skill2_img.clip_draw(0, 0, 32, 32, 700, 20, 100, 100)
+                self.skill1_img.clip_draw(0, 0, 32, 32, 730, 30, 100, 100)
+                self.skill2_img.clip_draw(0, 0, 32, 32, 740, 30, 60, 60)
             else:
                 self.skill_font.draw(700, 20, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255,255,255))
 
