@@ -1,5 +1,7 @@
 from map.map import *
+import framework
 from state_machine import StateMachine
+from Scene import next_round
 
 idle = lambda e : e[0] == 'IDLE'
 move = lambda e : e[0] == 'MOVE'
@@ -242,18 +244,27 @@ class HP:
     def __init__(self, num):
         self.img = load_image('UI/image/hp.png')
         self.hp = 9
+        self.final_hp = 2
+        self.final_hp_img = load_image('UI/image/final_hp.png')
         self.player_num = num
 
     def draw(self):
         if self.player_num == 'player1':
             for i in range(0, self.hp):
                 self.img.clip_draw(16,33,16,15,150 + i * 16,660, 100,100)
+            for i in range(self.final_hp):
+                self.final_hp_img.clip_draw(0,0,21,21,120 + i*20, 620)
         elif self.player_num == 'player2':
             for i in range(0, self.hp):
                 self.img.clip_draw(16, 33, 16, 15, 650 - i * 16, 660, 100, 100)
+            for i in range(self.final_hp):
+                self.final_hp_img.clip_draw(0,0,21,21,700 - i*20, 620)
 
     def damaged(self, num):
         self.hp -= num
+        if self.hp <= 0:
+            self.final_hp -= 1
+            framework.push_mode(next_round)
         from Scene.play_scene import sfx
         if self.player_num == 'player1':
             sfx.play('damaged')
