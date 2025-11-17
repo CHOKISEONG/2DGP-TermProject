@@ -16,7 +16,6 @@ class KingBird(Bird):
         self.speed = 3
         self.tile_speed = 2
 
-        self.skill_font = load_font('ENCR10B.TTF', 50)
         self.skill1_img = load_image('Character/image/Robin.png')
         self.skill1_cur_cooldown = 4
         self.skill1_max_cooldown = 4

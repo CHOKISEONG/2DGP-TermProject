@@ -19,6 +19,7 @@ is_miss = False
 player1 = None
 player2 = None
 sfx = None
+bg = None
 
 def init():
     global music, player1, player2, bg, crowd, heart_ui, sfx, bpm_ui

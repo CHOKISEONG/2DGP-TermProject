@@ -58,8 +58,8 @@ def handle_events():
     event_list = get_events()
     for event in event_list:
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            player1_character = 'shovelBird'
-            player2_character = 'kingBird'
+            player1_character = 'kingBird'
+            player2_character = 'blackBird'
             framework.change_mode(play_scene)
 
     # 캐릭터 이동 애니메이션 완료 후에 입력 받게 설정

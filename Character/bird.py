@@ -292,6 +292,7 @@ class Bird:
         self.target_pos = list(self.current_pos)
         self.look = DIRECTION.NONE
         self.hp = HP(self.player_num)
+        self.skill_font = load_font('ENCR10B.TTF', 50)
 
         self.move_speed = 0.05
         self.last_beat_idx = -1
