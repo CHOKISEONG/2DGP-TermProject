@@ -254,6 +254,11 @@ class HP:
 
     def damaged(self, num):
         self.hp -= num
+        from Scene.play_scene import sfx
+        if self.player_num == 'player1':
+            sfx.play('damaged')
+        else:
+            sfx.play('damaged2')
 
 class Bird:
     def __init__(self, img_path, field : Map, num):

@@ -27,7 +27,9 @@ class SfxManager:
             'direction_tile' : load_music('Sound/sample/put_tile.mp3'),
             'walk' : load_music('Sound/sample/walk.mp3'),
             'explosion' : load_music('Sound/sample/explosion.mp3'),
-            'fall' : load_wav('Sound/sample/fall.wav')
+            'fall' : load_wav('Sound/sample/fall.wav'),
+            'damaged' : load_wav('Sound/sample/damaged.wav'),
+            'damaged2': load_wav('Sound/sample/damaged2.wav')
         }
         self.sfx['direction_tile'].set_volume(30)
         self.sfx['walk'].set_volume(20)
