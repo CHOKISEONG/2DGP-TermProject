@@ -45,6 +45,7 @@ class KingBird(Bird):
             or self.state_machine.cur_state == self.FALL): return
 
         if self.player_num == 'player1':
+            print('킹버드 플레이어1')
             # 스킬1 - 폭발하는 새 발사
             if SDLK_f in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
@@ -135,23 +136,24 @@ class Ghost:
         if get_time() - self.time > 5:
             game_world.remove_object(self)
 
-        base_angle = math.radians(self.base_dir)
-        local_angle = math.radians(self.dir)
+        if get_time() - self.time > 0.5:
+            base_angle = math.radians(self.base_dir)
+            local_angle = math.radians(self.dir)
 
-        dx = math.cos(local_angle) * self.speed
-        dy = math.sin(local_angle) * self.speed
+            dx = math.cos(local_angle) * self.speed
+            dy = math.sin(local_angle) * self.speed
 
-        rotated_dx = dx * math.cos(base_angle) - dy * math.sin(base_angle)
-        rotated_dy = dx * math.sin(base_angle) + dy * math.cos(base_angle)
+            rotated_dx = dx * math.cos(base_angle) - dy * math.sin(base_angle)
+            rotated_dy = dx * math.sin(base_angle) + dy * math.cos(base_angle)
 
-        if 0 < self.dir <= 180:
-            self.pos[0] += rotated_dx
-            self.pos[1] += rotated_dy
-        else:
-            game_world.add_object(Explosion(self.pos))
-            self.dir = 0
+            if 0 < self.dir <= 180:
+                self.pos[0] += rotated_dx
+                self.pos[1] += rotated_dy
+            else:
+                game_world.add_object(Explosion(self.pos))
+                self.dir = 0
 
-        self.dir += 13
+            self.dir += 13
 
     def draw(self):
         self.img.clip_composite_draw(48,0,48,48,self.look, self.flip, *self.pos, *self.size)
