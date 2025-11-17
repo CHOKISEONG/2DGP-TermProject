@@ -23,6 +23,7 @@ sfx = None
 def init():
     global music, player1, player2, bg, crowd, heart_ui, sfx, bpm_ui
 
+    resize_canvas(800,700)
     bg = Map()
     game_world.add_object(bg, 0)
 

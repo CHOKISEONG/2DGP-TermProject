@@ -35,7 +35,7 @@ class SfxManager:
         self.sfx['direction_tile'].set_volume(30)
         self.sfx['walk'].set_volume(20)
         self.sfx['explosion'].set_volume(20)
-        self.sfx['fall'].set_volume(50)
+        self.sfx['fall'].set_volume(80)
 
     def play(self, name):
         if name not in self.sfx:

@@ -55,12 +55,12 @@ def handle_events():
     global player1_character, player2_character, select_font, choice_font_pos
 
     # 개발 진행을 원활히 하기 위해 만든 스페이스바로 캐릭터 선택구간 스킵용
-    event_list = get_events()
-    for event in event_list:
-        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            player1_character = 'shovelBird'
-            player2_character = 'kingBird'
-            framework.change_mode(play_scene)
+    # event_list = get_events()
+    # for event in event_list:
+    #     if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+    #         player1_character = 'shovelBird'
+    #         player2_character = 'kingBird'
+    #         framework.change_mode(play_scene)
 
     # 캐릭터 이동 애니메이션 완료 후에 입력 받게 설정
     if bird1_pos[1] < 350:
@@ -84,17 +84,17 @@ def handle_events():
                     choice_font_pos[0], choice_font_pos[1] = bird1_pos[0] - 50, bird1_pos[1] - 100
                 elif choice_font_pos[0] != bird1_pos[0] - 50:
                         choice_font_pos[2], choice_font_pos[3] = bird1_pos[0] - 50, bird1_pos[1] - 100
-            elif is_selected(mouse_x, mouse_y, *bird2_pos, 1):
+            if is_selected(mouse_x, mouse_y, *bird2_pos, 1):
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird2_pos[0] - 50, bird2_pos[1] - 100
                 elif choice_font_pos[0] != bird2_pos[0] - 50:
                     choice_font_pos[2], choice_font_pos[3] = bird2_pos[0] - 50, bird2_pos[1] - 100
-            elif is_selected(mouse_x, mouse_y, *bird3_pos, 2):
+            if is_selected(mouse_x, mouse_y, *bird3_pos, 2):
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird3_pos[0] - 50, bird3_pos[1] - 100
                 elif choice_font_pos[0] != bird3_pos[0] - 50:
                     choice_font_pos[2], choice_font_pos[3] = bird3_pos[0] - 50, bird3_pos[1] - 100
-            elif is_selected(mouse_x, mouse_y, *bird4_pos, 3):
+            if is_selected(mouse_x, mouse_y, *bird4_pos, 3):
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird4_pos[0] - 50, bird4_pos[1] - 100
                 elif choice_font_pos[0] != bird4_pos[0] - 50:

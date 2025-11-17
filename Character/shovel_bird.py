@@ -29,14 +29,15 @@ class ShovelBird(Bird):
             if SDLK_f in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
-                make_direction_tile(y, x, key_state, self.field)
+                make_fall_tile(y, x, key_state, self.field)
                 return
 
+
             # 스킬2 - 낭떠러지 타일 깔기
-            elif SDLK_g in key_state:
+            if SDLK_g in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
-                make_fall_tile(y, x, key_state, self.field)
+                make_direction_tile(y, x, key_state, self.field)
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
@@ -49,14 +50,14 @@ class ShovelBird(Bird):
             if SDLK_PERIOD in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
-                make_direction_tile(y, x, key_state, self.field)
+                make_fall_tile(y, x, key_state, self.field)
                 return
 
             # 스킬2 - 낭떠러지 타일 깔기
             elif SDLK_SLASH in key_state:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 y, x = self.pos_to_row_col(self.pos)
-                make_fall_tile(y, x, key_state, self.field)
+                make_direction_tile(y, x, key_state, self.field)
                 return
 
             # 이동 처리 (마지막에 둬서 다른 키 말고 이동키만 눌렀는지 확인함)
