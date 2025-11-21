@@ -95,14 +95,17 @@ class KingBird(Bird):
         self.hp.draw()
         if self.player_num == 'player1':
             self.face_ui.clip_draw(32,263,15,15,50,650,100,100)
+
             if self.skill1_cur_cooldown == self.skill1_max_cooldown:
                 self.skill1_img.clip_composite_draw(48,0,48,48, 0, 'not flip', 80, 20, 150, 100)
             else:
                 self.skill_font.draw(60, 20, str(self.skill1_max_cooldown - self.skill1_cur_cooldown), (255,255,255))
+
             if self.skill2_cur_cooldown == self.skill2_max_cooldown:
                 self.skill2_img.clip_composite_draw(48,0,48,48, 0, 'not flip', 130, 20, 100, 100)
             else:
                 self.skill_font.draw(130, 20, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255,255,255))
+
         else:
             self.face_ui.clip_draw(32,263,15,15,750,650,100,100)
             if self.skill1_cur_cooldown == self.skill1_max_cooldown:
