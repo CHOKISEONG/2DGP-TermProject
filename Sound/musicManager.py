@@ -30,13 +30,17 @@ class SfxManager:
             'fall' : load_wav('Sound/sample/fall.wav'),
             'damaged' : load_wav('Sound/sample/damaged.wav'),
             'damaged2': load_wav('Sound/sample/damaged2.wav'),
-            'win' : load_wav('Sound/sample/win.wav')
+            'win' : load_wav('Sound/sample/win.wav'),
+            'fire' : load_wav('Sound/sample/firecracker.wav'),
+            'star' : load_wav('Sound/sample/star.wav')
         }
         self.sfx['direction_tile'].set_volume(30)
         self.sfx['walk'].set_volume(20)
         self.sfx['explosion'].set_volume(20)
         self.sfx['fall'].set_volume(80)
         self.sfx['win'].set_volume(60)
+        self.sfx['fire'].set_volume(50)
+        self.sfx['star'].set_volume(30)
 
     def play(self, name):
         if name not in self.sfx:

@@ -54,6 +54,8 @@ class BlackBird(Bird):
                 skill = Skill1(self.look, self.current_pos)
                 self.skill1.append(skill)
                 game_world.add_object(skill, 2)
+                from Scene.play_scene import sfx
+                sfx.play('star')
                 self.skill1_cur_cooldown = 0
                 return
 
@@ -77,6 +79,8 @@ class BlackBird(Bird):
                 skill = Skill1(self.look, self.current_pos)
                 self.skill1.append(skill)
                 game_world.add_object(skill, 2)
+                from Scene.play_scene import sfx
+                sfx.play('star')
                 self.skill1_cur_cooldown = 0
                 return
 

@@ -46,7 +46,7 @@ class HatBird(Bird):
             or self.state_machine.cur_state == self.FALL): return
 
         if self.player_num == 'player1':
-            # 스킬1 - 폭발하는 새 발사
+            # 스킬1 - 2칸 이동
             if SDLK_f in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 self.move(self.look)
@@ -54,34 +54,12 @@ class HatBird(Bird):
                 self.skill1_cur_cooldown = 0
                 return
 
-            # 스킬2
+            # 스킬2 - 범위 폭발
             elif SDLK_g in key_state and self.skill2_cur_cooldown >= self.skill2_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
-                pos = self.current_pos
-                if self.look == DIRECTION.LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                if self.look == DIRECTION.RIGHT:
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                if self.look == DIRECTION.DOWN_LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                if self.look == DIRECTION.DOWN_RIGHT:
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                if self.look == DIRECTION.UP_LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
-                if self.look == DIRECTION.UP_RIGHT:
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
+                from Scene.play_scene import sfx
+                sfx.play('fire')
+                make_hat_skill(self.current_pos, self.look)
                 self.skill2_cur_cooldown = 0
                 return
 
@@ -91,7 +69,7 @@ class HatBird(Bird):
                 self.state_machine.handle_state_event(('MOVE', key_state))
 
         elif self.player_num == 'player2':
-            # 스킬1
+            # 스킬1 - 2칸 이동
             if SDLK_PERIOD in key_state and self.skill1_cur_cooldown >= self.skill1_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
                 self.move(self.look)
@@ -99,35 +77,12 @@ class HatBird(Bird):
                 self.skill1_cur_cooldown = 0
                 return
 
-            # 스킬2
+            # 스킬2 - 범위 폭발
             elif SDLK_SLASH in key_state and self.skill2_cur_cooldown >= self.skill2_max_cooldown:
                 self.state_machine.handle_state_event(('SKILL', key_state))
-                pos = self.current_pos
-                if self.look == DIRECTION.LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                if self.look == DIRECTION.RIGHT:
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                if self.look == DIRECTION.DOWN_LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                if self.look == DIRECTION.DOWN_RIGHT:
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                if self.look == DIRECTION.UP_LEFT:
-                    game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
-                if self.look == DIRECTION.UP_RIGHT:
-                    game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
-                    game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
-
+                from Scene.play_scene import sfx
+                sfx.play('fire')
+                make_hat_skill(self.current_pos, self.look)
                 self.skill2_cur_cooldown = 0
                 return
 
@@ -165,6 +120,32 @@ class HatBird(Bird):
                 self.skill_font.draw(730, 40, str(self.skill2_max_cooldown - self.skill2_cur_cooldown), (255, 255, 255))
 
         draw_rectangle(*self.get_bb())
+
+def make_hat_skill(pos, look):
+    if look == DIRECTION.LEFT:
+        game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
+    if look == DIRECTION.RIGHT:
+        game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
+    if look == DIRECTION.DOWN_LEFT:
+        game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
+    if look == DIRECTION.DOWN_RIGHT:
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] - 50)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] - 45)), 2)
+        game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
+    if look == DIRECTION.UP_LEFT:
+        game_world.add_object(HatSkill((pos[0] - 40, pos[1] - 15)), 2)
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
+    if look == DIRECTION.UP_RIGHT:
+        game_world.add_object(HatSkill((pos[0] - 20, pos[1] + 20)), 2)
+        game_world.add_object(HatSkill((pos[0] + 50, pos[1] - 15)), 2)
+        game_world.add_object(HatSkill((pos[0] + 30, pos[1] + 15)), 2)
 
 class HatSkill:
     def __init__(self, pos):
