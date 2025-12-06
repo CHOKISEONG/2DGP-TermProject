@@ -18,7 +18,7 @@ class VictoryImg:
     def update(self):
         cur_time = get_time()
         if cur_time - self.timer > 6.0:
-            quit()
+            framework.quit()
 
     def draw(self):
         self.victory_image.clip_draw(0, 0, 800, 600, 400, 350, 800, 700)

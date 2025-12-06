@@ -1,4 +1,6 @@
 from pico2d import *
+
+import framework
 from Character.crowd import Crowd
 from Character.shovel_bird import ShovelBird
 from Character.black_bird import BlackBird
@@ -95,7 +97,7 @@ def handle_events():
     for event in get_events():
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
-                exit()
+                framework.quit()
             elif event.key in player1_key:
                 key_state1.add(event.key)
             elif event.key in player2_key:
