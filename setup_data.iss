@@ -35,7 +35,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Pycharm\2DGP-TermProject\Temp
 OutputBaseFilename=BirdiumSetup2023182034
-SetupIconFile=C:\Pycharm\2DGP-TermProject\UI\image\icon.ico
+SetupIconFile=C:\Pycharm\2DGP-TermProject\icon.ico
 SolidCompression=yes
 WizardStyle=modern dark windows11
 
