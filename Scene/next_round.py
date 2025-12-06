@@ -1,6 +1,8 @@
 from pico2d import *
 import framework
 import game_world
+import Global.myEnum
+from Scene import victory_scene
 
 def init():
     from Scene.play_scene import sfx
@@ -15,6 +17,15 @@ def handle_events():
 def update():
     global timer
     from Scene.play_scene import player1, player2
+
+    if player1.hp.final_hp <= 0:
+        print('player2 최종 우승')
+        Global.myEnum.victory_player = 'player2 '
+        framework.push_mode(victory_scene)
+    elif player2.hp.final_hp <= 0:
+        print('player1 최종 우승')
+        Global.myEnum.victory_player = 'player1 '
+        framework.push_mode(victory_scene)
 
     if get_time() - timer > 3.0:
         if player1.hp.hp <= 0:

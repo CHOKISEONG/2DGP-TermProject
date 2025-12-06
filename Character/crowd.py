@@ -28,27 +28,41 @@ def get_random_pos_title():
     y = y1 + (y2 - y1) * t
     return x, y
 
+def get_random_pos_victory():
+    return random.randint(0,800), random.randint(0,1800)
+
 class Crowd:
     bird_names = ["budgie", "cockatiel", "duck", "parrot", "robin", "sparrow", "toucan"]
+    bird_nums = 0
 
     def __init__(self, str):
         self.images = {name: load_image(f"Character/image/{name.capitalize()}.png") for name in self.bird_names}
         if str == 'title':
+            bird_nums = 15
             self.positions = {name: [get_random_pos_title() for _ in range(15)] for name in self.bird_names}
+        elif str == 'victory':
+            bird_nums = 100
+            self.positions = {name: [get_random_pos_victory() for _ in range(150)] for name in self.bird_names}
         else:
+            bird_nums = 15
             self.positions = {name: [get_random_pos() for _ in range(15)] for name in self.bird_names}
         self.w, self.h = 48, 48
         self.cx, self.cy = 400, 300  # 중앙 좌표
         self.last_beat_idx = -1
         self.size = 1
 
+        if str == 'victory':
+            self.isVictory = True
+        else:
+            self.isVictory = False
+
     def update(self, beat_idx):
         if self.last_beat_idx != beat_idx:
             self.size = 1.1 if self.size == 1 else 1
             self.last_beat_idx = beat_idx
 
-    def draw(self):
-        for i in range(15):
+    def draw(self, beat_idx= 0):
+        for i in range(Crowd.bird_nums):
             for name in self.bird_names:
                 img = self.images[name]
                 x, y = self.positions[name][i]
@@ -70,6 +84,34 @@ class Crowd:
 
     def draw_title(self, cx = 400, cy = 300):
         for i in range(15):
+            for name in self.bird_names:
+                img = self.images[name]
+                x, y = self.positions[name][i]
+
+                dx = cx - x
+                dy = cy - y
+                rad = math.atan2(dy, dx) + math.pi
+
+                if x < 400:
+                    flip = 'v'
+                else:
+                    flip = 'none'
+
+                img.clip_composite_draw(
+                    0, 0, self.w, self.h,
+                    rad, flip,
+                    x, y,
+                    140 * self.size, 140 * self.size
+                )
+
+    def draw_victory(self, cx = 400, cy = 300):
+        if self.isVictory:
+            for name in self.positions:
+                for i in range(len(self.positions[name])):
+                    x, y = self.positions[name][i]
+                    self.positions[name][i] = (x, y - random.randint(0,5))
+
+        for i in range(150):
             for name in self.bird_names:
                 img = self.images[name]
                 x, y = self.positions[name][i]

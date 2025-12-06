@@ -10,6 +10,8 @@ title_sound = None
 mouse_x = 400.0
 mouse_y = 300.0
 
+Y_DIFF = 1.1667
+
 class TitleImg:
     def __init__(self):
         self.title_image = load_image('map/image/title.png')
@@ -39,27 +41,23 @@ class TitleImg:
     def draw(self):
         if self.is_paused:
             self.image_white.clip_draw((self.image_white_frame % 6) * 128, 600 - 96 * (self.image_white_frame // 6 + 1),
-                                       128, 96, 400, 300,
-                                       800, 600)
-            self.title_image.draw(400, 300)
-            self.crowd.draw_title(mouse_x, mouse_y)
+                                       128, 96, 400, 350, 800, 700)
+            self.title_image.clip_draw(0,0,800,600, 400, 350, 800, 700)
+            self.crowd.draw_title(mouse_x, mouse_y * Y_DIFF)
         else:
-            self.image_white.clip_draw((self.image_white_frame % 6) * 128, 600 - 96 * (self.image_white_frame // 6 + 1), 128, 96, 400, 300,
-                                  800, 600)
+            self.image_white.clip_draw((self.image_white_frame % 6) * 128, 600 - 96 * (self.image_white_frame // 6 + 1), 128, 96, 400, 350, 800, 700)
             if self.timer >= 6.0:
-                self.title_image.draw(400, 300)
-                self.crowd.draw_title(mouse_x, mouse_y)
-                self.start_button.clip_draw(0, 30, 100, 50, 400, 200, 220 * self.button_ds, 100 * self.button_ds)
+                self.title_image.clip_draw(0,0,800,600, 400, 350, 800, 700)
+                self.crowd.draw_title(mouse_x, mouse_y * Y_DIFF)
+                self.start_button.clip_draw(0, 30, 100, 50, 400, 200 * Y_DIFF, 220 * self.button_ds, 100 * self.button_ds * Y_DIFF)
             else:
-                self.my_name.draw(300, 400, '2023182034')
-                self.my_name.draw(300, 350, 'Cho Kiseong')
-
+                self.my_name.draw(330, 320 * Y_DIFF, 'Birdium')
 
 
 def init():
     global title, timer, title_sound, my_name
     title = TitleImg()
-    game_world.add_object(title)
+    game_world.add_object(title, 0)
 
     title_sound = load_music('Sound/music/title_music.mp3')
     title_sound.repeat_play()
@@ -75,7 +73,7 @@ def handle_events():
             framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             mouse_x, mouse_y = event.x, get_canvas_height() - event.y
-            if 310 < mouse_x < 510 and 150 < mouse_y < 230:
+            if 310 < mouse_x < 510 and 250 < mouse_y < 330:
                 title.button_ds = 1.1
             else:
                 title.button_ds = 1.0
@@ -85,18 +83,15 @@ def handle_events():
             if mouse_y < 200: mouse_y = 200
 
         elif event.type == SDL_MOUSEBUTTONDOWN and title.timer >= 6.0:
-            if 310 < mouse_x < 510 and 150 < mouse_y < 230:
+            if 310 < mouse_x < 510 and 250 < mouse_y < 330:
                 framework.push_mode(character_selection_scene)
 
 
 def update():
     game_world.update(0)
 
-
 def draw():
-    clear_canvas()
     game_world.render()
-    update_canvas()
 
 def finish():
     print('title_scene finished')

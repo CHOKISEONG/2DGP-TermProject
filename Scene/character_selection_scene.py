@@ -9,13 +9,14 @@ player2_character = None
 start_selected_music = None
 
 difficulty_show = (False, False, False, False)
+Y_DIFF = 1.1667
 
 # i가 0~3 까지 4개의 캐릭터가 마우스랑 겹치는지 확인해서 사이즈 증가
 def is_selected(mouse_x, mouse_y, x, y, i):
     half_w = size[0] * ds[i] / 3.0
     half_h = size[1] * ds[i] / 3.0
     bx, by = x, y
-    if (bx - half_w) <= mouse_x <= (bx + half_w) and (by - half_h) <= mouse_y <= (by + half_h):
+    if (bx - half_w) <= mouse_x <= (bx + half_w) and (by - half_h)<= mouse_y <= (by + half_h):
         ds[i] = 1.2
         return True
     else:
@@ -76,7 +77,7 @@ def handle_events():
 
     event_list = get_events()
     for event in event_list:
-        mouse_x, mouse_y = event.x, get_canvas_height() - event.y
+        mouse_x, mouse_y = event.x, get_canvas_height() - event.y * Y_DIFF
         if event.type == SDL_QUIT:
             framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
@@ -85,27 +86,27 @@ def handle_events():
             if is_selected(mouse_x, mouse_y, *bird1_pos, 0):
                 difficulty_show = (True, False, False, False)
                 if player1_character is None:
-                    choice_font_pos[0], choice_font_pos[1] = bird1_pos[0] - 50, bird1_pos[1] - 100
+                    choice_font_pos[0], choice_font_pos[1] = bird1_pos[0] - 20, (bird1_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird1_pos[0] - 50:
-                        choice_font_pos[2], choice_font_pos[3] = bird1_pos[0] - 50, bird1_pos[1] - 100
+                        choice_font_pos[2], choice_font_pos[3] = bird1_pos[0] - 20, (bird1_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird2_pos, 1):
                 difficulty_show = (False, True, False, False)
                 if player1_character is None:
-                    choice_font_pos[0], choice_font_pos[1] = bird2_pos[0] - 50, bird2_pos[1] - 100
+                    choice_font_pos[0], choice_font_pos[1] = bird2_pos[0] - 20, (bird2_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird2_pos[0] - 50:
-                    choice_font_pos[2], choice_font_pos[3] = bird2_pos[0] - 50, bird2_pos[1] - 100
+                    choice_font_pos[2], choice_font_pos[3] = bird2_pos[0] - 20, (bird2_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird3_pos, 2):
                 difficulty_show = (False, False, True, False)
                 if player1_character is None:
-                    choice_font_pos[0], choice_font_pos[1] = bird3_pos[0] - 50, bird3_pos[1] - 100
+                    choice_font_pos[0], choice_font_pos[1] = bird3_pos[0] - 20, (bird3_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird3_pos[0] - 50:
-                    choice_font_pos[2], choice_font_pos[3] = bird3_pos[0] - 50, bird3_pos[1] - 100
+                    choice_font_pos[2], choice_font_pos[3] = bird3_pos[0] - 20, (bird3_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird4_pos, 3):
                 difficulty_show = (False, False, False, True)
                 if player1_character is None:
-                    choice_font_pos[0], choice_font_pos[1] = bird4_pos[0] - 50, bird4_pos[1] - 100
+                    choice_font_pos[0], choice_font_pos[1] = bird4_pos[0] - 20, (bird4_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird4_pos[0] - 50:
-                    choice_font_pos[2], choice_font_pos[3] = bird4_pos[0] - 50, bird4_pos[1] - 100
+                    choice_font_pos[2], choice_font_pos[3] = bird4_pos[0] - 20, (bird4_pos[1] - 70) * Y_DIFF
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if is_selected(mouse_x, mouse_y, *bird1_pos, 0):
                 if player1_character is None:
@@ -149,17 +150,17 @@ def handle_events():
 def update():
     global time, delay, rotate_idx
     game_world.update(0)
-    if bird1_pos[1] < 350:
-        bird1_pos[1] += 1
+    if bird1_pos[1] < 350 * Y_DIFF:
+        bird1_pos[1] += 1 * Y_DIFF
         bird1_pos[0] -= 0.5
-    if bird2_pos[1] < 350:
-        bird2_pos[1] += 1
+    if bird2_pos[1] < 350 * Y_DIFF:
+        bird2_pos[1] += 1 * Y_DIFF
         bird2_pos[0] -= 0.15
-    if bird3_pos[1] < 350:
-        bird3_pos[1] += 1
+    if bird3_pos[1] < 350 * Y_DIFF:
+        bird3_pos[1] += 1 * Y_DIFF
         bird3_pos[0] += 0.15
-    if bird4_pos[1] < 350:
-        bird4_pos[1] += 1
+    if bird4_pos[1] < 350 * Y_DIFF:
+        bird4_pos[1] += 1 * Y_DIFF
         bird4_pos[0] += 0.5
         size[0] += 0.3
         size[1] += 0.3
@@ -185,27 +186,14 @@ def update():
     delay = min(max_delay, delay + delay_growth)
 
 def draw():
-    clear_canvas()
-
     game_world.render()
-    bird1.draw(*bird1_pos, size[0] * ds[0], size[1] * ds[0])
-    bird2.draw(*bird2_pos, size[0] * ds[1], size[1] * ds[1])
-    bird3.draw(*bird3_pos, size[0] * ds[2], size[1] * ds[2])
-    bird4.draw(*bird4_pos, size[0] * ds[3], size[1] * ds[3])
+    bird1.draw(*bird1_pos, size[0] * ds[0] * Y_DIFF, size[1] * ds[0] * Y_DIFF)
+    bird2.draw(*bird2_pos, size[0] * ds[1] * Y_DIFF, size[1] * ds[1] * Y_DIFF)
+    bird3.draw(*bird3_pos, size[0] * ds[2] * Y_DIFF, size[1] * ds[2] * Y_DIFF)
+    bird4.draw(*bird4_pos, size[0] * ds[3] * Y_DIFF, size[1] * ds[3] * Y_DIFF)
 
-    if difficulty_show[0]:
-        choice_font.draw(bird1_pos[0] - 30, bird1_pos[1] + 50, 'Hardcore')
-    elif difficulty_show[1]:
-        choice_font.draw(bird2_pos[0] - 30, bird2_pos[1] + 50, 'Beginner')
-    elif difficulty_show[2]:
-        choice_font.draw(bird3_pos[0] - 30, bird3_pos[1] + 50, 'Medium')
-    elif difficulty_show[3]:
-        choice_font.draw(bird4_pos[0] - 40, bird4_pos[1] + 50, 'coming soon..')
-
-    choice_font.draw(choice_font_pos[0], choice_font_pos[1], 'Player 1', (255,0,0))
-    choice_font.draw(choice_font_pos[2], choice_font_pos[3], 'Player 2', (0,255,0))
-
-    update_canvas()
+    choice_font.draw(choice_font_pos[0], choice_font_pos[1] * Y_DIFF, 'Player 1', (255,0,0))
+    choice_font.draw(choice_font_pos[2], choice_font_pos[3] * Y_DIFF, 'Player 2', (0,255,0))
 
 def finish():
     pass

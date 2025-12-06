@@ -1,6 +1,8 @@
 from enum import Enum
 from pico2d import *
 
+victory_player = ''
+
 # 게임의 6방향을 나타내는 용도 (0은 방향x, 오른쪽 = 1 부터 반시계 방향)
 class DIRECTION(Enum):
     NONE = 0

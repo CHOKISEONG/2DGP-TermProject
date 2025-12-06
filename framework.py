@@ -1,4 +1,5 @@
 from pico2d import *
+import sdl2
 
 running = None
 stack = []

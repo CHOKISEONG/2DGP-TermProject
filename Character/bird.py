@@ -2,6 +2,8 @@ from map.map import *
 import framework
 from state_machine import StateMachine
 from Scene import next_round
+from Scene import victory_scene
+import Global.myEnum
 
 idle = lambda e : e[0] == 'IDLE'
 move = lambda e : e[0] == 'MOVE'
@@ -262,12 +264,6 @@ class HP:
 
     def damaged(self, num):
         self.hp -= num
-        if self.final_hp <= 0:
-            if self.player_num == 'player1':
-                print('player2 최종 우승')
-                # 할일 - ending scene 만들어서 우승 축하해주기
-            else:
-                print('player1 최종 우승')
         if self.hp <= 0:
             self.final_hp -= 1
             framework.push_mode(next_round)

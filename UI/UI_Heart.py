@@ -53,11 +53,12 @@ class UI_Heart():
 
     def update(self, beat_idx):
         if self.last_beat_idx != beat_idx:
+            self.last_beat_idx = beat_idx
+            if beat_idx == -1:
+                return
             self.size = 60 if self.size == 50 else 50
             self.img_line.h = 100 if self.img_line.h == 40 else 40
             self.generate_bar()
-
-            self.last_beat_idx = beat_idx
 
     def draw(self):
         self.img_line.draw()
