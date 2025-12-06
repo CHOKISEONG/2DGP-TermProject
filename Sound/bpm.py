@@ -20,9 +20,9 @@ class Bpm:
         beat_time = self.start_time + nearest_beat * self.interval
         diff = abs(now - beat_time)
 
-        if diff < window * 0.1:
+        if diff < window * 0.05:
             return "Perfect", diff
-        elif diff < window * 0.2:
+        elif diff < window * 0.1:
             return "Good", diff
         else:
             return "Miss", diff
