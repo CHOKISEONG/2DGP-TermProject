@@ -8,7 +8,7 @@ player1_character = None
 player2_character = None
 start_selected_music = None
 
-difficulty_show = (False, False, False, False)
+character_explain = 'none'
 Y_DIFF = 1.1667
 
 # i가 0~3 까지 4개의 캐릭터가 마우스랑 겹치는지 확인해서 사이즈 증가
@@ -56,7 +56,7 @@ def init():
     select_sound2 = load_music('Sound/sample/select_sound2.mp3')
 
 def handle_events():
-    global player1_character, player2_character, select_font, choice_font_pos, difficulty_show
+    global player1_character, player2_character, select_font, choice_font_pos, character_explain
 
     # 개발 진행을 원활히 하기 위해 만든 스페이스바로 캐릭터 선택구간 스킵용
     # event_list = get_events()
@@ -78,31 +78,29 @@ def handle_events():
     event_list = get_events()
     for event in event_list:
         mouse_x, mouse_y = event.x, get_canvas_height() - event.y * Y_DIFF
-        if event.type == SDL_QUIT:
-            framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+        if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             if is_selected(mouse_x, mouse_y, *bird1_pos, 0):
-                difficulty_show = (True, False, False, False)
+                character_explain = 'shovelBird'
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird1_pos[0] - 20, (bird1_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird1_pos[0] - 50:
                         choice_font_pos[2], choice_font_pos[3] = bird1_pos[0] - 20, (bird1_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird2_pos, 1):
-                difficulty_show = (False, True, False, False)
+                character_explain = 'blackBird'
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird2_pos[0] - 20, (bird2_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird2_pos[0] - 50:
                     choice_font_pos[2], choice_font_pos[3] = bird2_pos[0] - 20, (bird2_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird3_pos, 2):
-                difficulty_show = (False, False, True, False)
+                character_explain = 'kingBird'
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird3_pos[0] - 20, (bird3_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird3_pos[0] - 50:
                     choice_font_pos[2], choice_font_pos[3] = bird3_pos[0] - 20, (bird3_pos[1] - 70) * Y_DIFF
             if is_selected(mouse_x, mouse_y, *bird4_pos, 3):
-                difficulty_show = (False, False, False, True)
+                character_explain = 'hatBird'
                 if player1_character is None:
                     choice_font_pos[0], choice_font_pos[1] = bird4_pos[0] - 20, (bird4_pos[1] - 70) * Y_DIFF
                 elif choice_font_pos[0] != bird4_pos[0] - 50:
@@ -194,6 +192,15 @@ def draw():
 
     choice_font.draw(choice_font_pos[0], choice_font_pos[1] * Y_DIFF, 'Player 1', (255,0,0))
     choice_font.draw(choice_font_pos[2], choice_font_pos[3] * Y_DIFF, 'Player 2', (0,255,0))
+
+    if character_explain == 'shovelBird':
+        pass
+    if character_explain == 'blackBird':
+        pass
+    if character_explain == 'kingBird':
+        pass
+    if character_explain == 'hatBird':
+        pass
 
 def finish():
     pass
