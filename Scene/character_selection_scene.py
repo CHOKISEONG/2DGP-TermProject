@@ -25,7 +25,7 @@ def is_selected(mouse_x, mouse_y, x, y, i):
 
 def init():
     print('character_selection_scene init')
-    global start_selected_music, select_sound, select_sound2, select_font, bird1, bird1_pos, bird2, bird2_pos, bird3, bird3_pos, bird4, bird4_pos, choice_font, choice_font_pos, rotate, rotate_idx, delay, time, delay_growth, max_delay, size, ds
+    global start_selected_music, select_sound, select_sound2, select_font, bird1, bird1_pos, bird2, bird2_pos, bird3, bird3_pos, bird4, bird4_pos, choice_font, explain_font, choice_font_pos, rotate, rotate_idx, delay, time, delay_growth, max_delay, size, ds
     start_selected_music = load_music('Sound/sample/character_select_start.mp3')
     start_selected_music.set_volume(100)
     start_selected_music.play()
@@ -42,6 +42,7 @@ def init():
     ds = [1.0, 1.0, 1.0, 1.0]
 
     choice_font = load_font('ENCR10B.TTF', 16)
+    explain_font = load_font('ENCR10B.TTF', 32)
 
     choice_font_pos = [0, -10, 0, -10]
 
@@ -194,13 +195,13 @@ def draw():
     choice_font.draw(choice_font_pos[2], choice_font_pos[3] * Y_DIFF, 'Player 2', (0,255,0))
 
     if character_explain == 'shovelBird':
-        pass
+        explain_font.draw(bird1_pos[0] - 120, (bird1_pos[1] - 180) * Y_DIFF, 'Tile Layer & Digger', (255, 255, 255))
     if character_explain == 'blackBird':
-        pass
+        explain_font.draw(bird2_pos[0] - 120, (bird2_pos[1] - 180) * Y_DIFF, 'Shuriken Master', (255, 255, 255))
     if character_explain == 'kingBird':
-        pass
+        explain_font.draw(bird3_pos[0] - 120, (bird3_pos[1] - 180) * Y_DIFF, 'Bomb Bird Tamer', (255, 255, 255))
     if character_explain == 'hatBird':
-        pass
+        explain_font.draw(bird4_pos[0] - 120, (bird4_pos[1] - 180) * Y_DIFF, 'Dasher & Blaster', (255, 255, 255))
 
 def finish():
     pass
